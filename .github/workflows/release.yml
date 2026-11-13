@@ -1,0 +1,70 @@
+name: release
+
+# Only a release tag builds anything: push v0.1.0 and the workflow compiles the
+# EFI binary, packs the bootable ISO and attaches both plus a source tarball to
+# a GitHub release. Ordinary commits and pull requests build nothing.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: build and publish
+    runs-on: ubuntu-24.04
+    steps:
+      - name: check out the tagged commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: install the toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends clang lld python3 python3-pip
+          python3 -m pip install --break-system-packages --quiet pycdlib
+
+      - name: check the tag matches src/version.h
+        run: |
+          version="$(sed -n 's/^#define UCTS_VERSION[[:space:]]*"\([^"]*\)".*/\1/p' src/version.h)"
+          echo "version.h=$version tag=$GITHUB_REF_NAME"
+          test "v$version" = "$GITHUB_REF_NAME" || {
+            echo "::error::src/version.h says $version but the tag is $GITHUB_REF_NAME"
+            exit 1
+          }
+
+      - name: build the EFI binary
+        # the rasterised font is committed, so no font tooling is needed here
+        run: SKIP_FONT=1 OUT=build PYTHON=python3 bash tools/build.sh
+
+      - name: build the bootable ISO
+        run: python3 tools/mkiso.py --efi build/BOOTX64.EFI --out build/UCTS.iso
+
+      - name: collect the release assets
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          mkdir -p dist
+          cp build/BOOTX64.EFI "dist/UCTS-$version-BOOTX64.EFI"
+          cp build/UCTS.iso    "dist/UCTS-$version.iso"
+          git archive --format=tar.gz \
+            --prefix="uefi_component_test_suite-$version/" \
+            --output="dist/UCTS-$version-source.tar.gz" "$GITHUB_SHA"
+          ( cd dist && sha256sum ./* > SHA256SUMS.txt && cat SHA256SUMS.txt )
+
+      - name: verify the ISO before publishing
+        run: python3 tools/mkiso.py --verify build/UCTS.iso --efi build/BOOTX64.EFI
+
+      - name: publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: UCTS ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            dist/UCTS-*-BOOTX64.EFI
+            dist/UCTS-*.iso
+            dist/UCTS-*-source.tar.gz
+            dist/SHA256SUMS.txt

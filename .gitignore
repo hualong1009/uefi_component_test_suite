@@ -1,0 +1,11 @@
+build/
+*.o
+*.efi
+*.EFI
+__pycache__/
+*.iso
+
+# local browser automation scratch
+.playwright-mcp/
+hw_*.png
+kvm_*.png

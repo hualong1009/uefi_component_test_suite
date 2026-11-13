@@ -1,0 +1,851 @@
+# UI translation dictionary: <source Chinese><TAB><English>
+# Escapes: \n newline, \t tab, \\ backslash. Keep printf placeholders identical.
+# ---- common labels / states ----
+未运行	Not run
+注意	Warn
+异常	Fault
+发现错误	Errors found
+块设备	Block device
+%u 个设备	%u devices
+%u 次	%u times
+内存	Memory
+内存拓扑	Memory topology
+已通过	Passed
+未测	Untested
+正常	Good
+状态	Status
+硬盘擦除	Disk erase
+%u 个	%u
+BIOS 版本	BIOS version
+CPU 检测	CPU test
+不可用	n/a
+健康	Healthy
+内存检测	Memory test
+压力测试	Stress test
+压力测试页	Stress test
+固件	Firmware
+工具集	Tools
+已执行	Performed
+已测	Tested
+序列号	Serial number
+未执行	Not performed
+未检测	Untested
+未知处理器	Unknown CPU
+未知平台	Unknown platform
+未选择	Not selected
+本轮容量	This pass
+硬盘	Disk
+硬盘检测	Disk test
+空	Empty
+系统信息	System info
+系统厂商	System vendor
+系统型号	System model
+耗时 / 带宽	Time / bandwidth
+覆盖内存	Coverage
+%s · 覆盖率 %u%%	%s · coverage %u%%
+%u 核 / %u 线程	%u cores / %u threads
+%u 秒	%u s
+BIOS 厂商	BIOS vendor
+CPU 检测页	CPU test
+UEFI 组件测试套件	UEFI Component Test Suite
+主板	Board
+体系结构	Architecture
+关于	About
+内存插槽	Memory slots
+只读	Read only
+可用	Available
+完成	Done
+容量	Capacity
+尚未运行内存检测	No memory test yet
+工具集页	Tools
+已中止	Aborted
+已完成	Completed
+引导卷	Boot volume
+执行情况	Outcome
+报错颗粒	Failed chip
+插槽	Slot
+未发现块设备	No block device found
+未知	Unknown
+标识	ID
+检测结果	Results
+概览	Overview
+硬盘压力测试	Disk stress
+硬盘擦除页	Disk erase
+硬盘检测页	Disk test
+系统信息页	System info
+系统版本	System version
+耗时	Elapsed
+良好	Good
+通过	Pass
+错误数	Errors
+频率	Frequency
+首个错误地址	First error address
+预警	Warning
+警告	Warning
+跳过	Skipped
+失败	Failed
+准备	Ready
+开启	On
+关闭	Off
+中止	Abort
+内存不足，无法开始擦除	Not enough memory to start erasing
+选择目标	Select target
+可选目标	Targets
+目标设备	Target device
+目标项目	Targets
+目标：%s（%lu MB）	Target: %s (%lu MB)
+没有可用目标	No target available
+已运行 	Running 
+运行中	Running
+待开始	Pending
+加压中	Under load
+有异常	With errors
+发现异常	Errors seen
+未发现异常	No errors seen
+已取消压力测试	Stress test cancelled
+无记录	No records
+最近操作	Last action
+最近目标	Last target
+结果可通过 F2 导出为 HTML，便于随工单归档。	Results can be exported to HTML with F2 for ticketing.
+# ---- shell / navigation ----
+诊断	Diagnostics
+诊断套件就绪	Suite ready
+工具	Tools
+Enter 打开	Enter to open
+Enter 打开   ← → 切换   F10 退出	Enter open   ← → page   F10 exit
+Enter 打开颗粒视图	Enter opens chip view
+Enter 确认    Esc 取消	Enter confirm    Esc cancel
+Enter 确认 · Esc 取消	Enter confirm · Esc cancel
+Esc 关闭   ← → 切换内存条	Esc close   ← → switch DIMM
+F2 导出 HTML 报告	F2 exports an HTML report
+F2 快捷键	F2 key
+F5 开始   F6 停止   F7 图案   F8 覆盖   T 颗粒视图	F5 start   F6 stop   F7 patterns   F8 coverage   T chips
+1-9/0 直跳页面   F10 退出	1-9/0 jump to page   F10 exit
+1-9/0 直跳页面   F5 重新采集   F2 导出报告	1-9/0 jump   F5 re-read   F2 report
+Tab 分组  ↑↓ 选择  空格 勾选  ← → 时长  Enter 开始	Tab  ↑↓ Space  ←→ duration  Enter start
+↑↓ 设备   ← → 算法   R 范围   V 校验   Enter 擦除	↑↓ device   ← → algorithm   R range   V verify   Enter erase
+↑↓ 选择    Enter 确认    Esc 取消	↑↓ select    Enter confirm    Esc cancel
+↑↓ 选择   Enter 启动   F5 重新扫描	↑↓ select   Enter launch   F5 rescan
+↑↓ 选择   空格 勾选   F5 运行   F7 全选   F8 核心	↑↓ select   Space check   F5 run   F7 all   F8 cores
+↑↓ 选择设备   F5 扫描   F9 扫描全部   F6 停止	↑↓ device   F5 scan   F9 scan all   F6 stop
+↑↓/←→ 选择插槽   Enter 颗粒视图   Esc 返回	↑↓/←→ slot   Enter chip view   Esc back
+↑↓/←→ 选择插槽，Enter 打开颗粒视图	↑↓/←→ slot, Enter opens the chip view
+← → 切换页面    ↑ ↓ 选择    Enter 确认    F2 导出报告    F10 退出	← → page    ↑ ↓ select    Enter confirm    F2 report    F10 exit
+← → 切换页面    ↑ ↓ 选择    Enter 确认    F2 导出报告    F4 语言    F10 退出	← → page    ↑ ↓ select    Enter confirm    F2 report    F4 language    F10 exit
+← → 调 1 分 · PgUp/PgDn 调 5 分	← → 1 min · PgUp/PgDn 5 min
+R 切换范围 · V 切换校验 · Enter 开始擦除	R range · V verify · Enter erase
+Tab 切换分组	Tab: group
+空格 勾选	Space to check
+空格勾选目标，C/M/D 开关组件	Space checks targets, C/M/D toggle components
+空格勾选项目，F5 运行自检	Space checks items, F5 runs the self-test
+切换页面（1-9/0 直接跳转）	Switch page (1-9/0 jump)
+返回概览；检测中表示中止	Back / abort running test
+退出套件并返回固件	Exit the suite
+开始检测、扫描或自检	Start a test, scan or self-test
+停止当前检测	Stop the running test
+全选 / 仅核心项	All / core items only
+确认、启动外部工具或刷新信息	Confirm, run tool, refresh
+按键约定	Key bindings
+界面语言：中文	UI language: Chinese
+UI language: English	UI language: English
+# ---- overview page ----
+快速检测	Quick tests
+组件健康概览	Component health
+平台概览	Platform summary
+内存覆盖：%u%% · 带宽 %u MB/s	Coverage %u%% · %u MB/s
+最近扫描：%u 设备 · 平均 %u MB/s	Last scan: %u devices · %u MB/s avg
+系统与固件	System and firmware
+处理器与缓存	CPU and cache
+存储	Storage
+UEFI %u.%u · %u 逻辑处理器 · %u 块设备	UEFI %u.%u · %u logical CPUs · %u block devices
+系统信息已加载	System info loaded
+SMBIOS / CPUID / 内存拓扑	SMBIOS / CPUID / memory topology
+插槽 / rank / 颗粒级错误定位	Slots / ranks / per-chip error location
+SMART / NVMe 健康与顺序读扫描	SMART / NVMe health and sequential read scan
+DoD / Gutmann 多遍覆写 + 回读校验	DoD / Gutmann multi-pass overwrite + read-back verify
+整数 / FPU / 向量指令集自检	Integer / FPU / vector self-test
+多核 / 内存 / 硬盘持续加压计时	Multi-core / memory / disk stress with timer
+启动管理器与外部诊断工具	Boot manager and external tools
+已识别	Detected
+就绪	Ready
+无信息	No data
+# ---- system information page ----
+平台信息	Platform
+平台信息已重新采集	System information re-collected
+系统信息已重新采集	System info re-collected
+重新采集平台信息	Re-read platform information
+重新采集	Re-read
+固件信息不可用	Firmware information unavailable
+固件厂商	Firmware vendor
+固件版本	Firmware version
+固件规范	Firmware spec
+UEFI 规范版本	UEFI revision
+SMBIOS	SMBIOS
+SMBIOS 类型 0 / 1 / 2	SMBIOS type 0 / 1 / 2
+SMBIOS 类型 17	SMBIOS type 17
+SMBIOS / CPUID / 内存映射	SMBIOS / CPUID / memory map
+SMBIOS、CPUID、内存映射与启动卷	SMBIOS, CPUID, memory map and boot volume
+主板厂商	Board vendor
+主板型号	Board model
+系统序列号	System serial number
+厂商串	Vendor string
+叶范围	Leaf range
+缓存层级：L1 	Cache: L1 
+L1 缓存	L1 cache
+L2 缓存	L2 cache
+L3 缓存	L3 cache
+缓存行	Cache line
+最大容量	Max capacity
+最大逻辑处理器 %u · SMT %u 线程/核	Max logical CPUs %u · SMT %u threads/core
+%u 已装 / %u 槽位	%u installed / %u slots
+%u 槽位 · %u 通道 · 可测 	%u slots · %u channels · testable 
+已装 %s	%s installed
+内存类型	Memory type
+类型 / 速率	Type / speed
+类型	Type
+速率	Speed
+通道	Channel
+拓扑	Topology
+可访问	Accessible
+不可访问	Not accessible
+内存映射	Memory map
+内存映射中空闲区域	Free regions in the memory map
+可测试内存	Testable memory
+可测试容量	Testable capacity
+已安装容量	Installed capacity
+可用内存	Usable memory
+空闲可调度	Free and reusable
+%u 个描述符	%u descriptors
+%u 条	%u modules
+%u 条已安装	%u installed
+共 %u 条	%u total
+共 %u 项	%u items
+内存条	Module
+空槽	Empty slot
+%u 插槽 · %u socket	%u slots · %u sockets
+%u 个插槽 · %u 条在位	%u slots · %u populated
+%u 条内存 · %u MT/s	%u modules · %u MT/s
+%s%s · %u 条内存 · %u MT/s	%s%s · %u modules · %u MT/s
+%s%s · SMBIOS 未给频率	%s%s · SMBIOS reports no speed
+# ---- memory test page ----
+测试图案	Test patterns
+自检项目	Self-test items
+全 0 图案	All zeros
+全 1 图案	All ones
+棋盘 55/AA	Checkerboard 55/AA
+棋盘 AA/55	Checkerboard AA/55
+地址图案	Address pattern
+地址 XOR 全 1	Address XOR all ones
+地址 XOR 55AA	Address XOR 55AA
+伪随机 LFSR	Pseudo-random LFSR
+走动 1	Walking 1
+走动 0	Walking 0
+x^64 线性反馈序列	x^64 linear feedback sequence
+反码地址图案	Inverted address pattern
+交错地址图案	Interleaved address pattern
+写入单元物理地址	Writes each cell's physical address
+单词内单个 1 游走	Single walking 1 per word
+单词内单个 0 游走	Single walking 0 per word
+全 0 / 全 1 / 棋盘 / 地址位 / LFSR / 走动 1 等图案的写入与回读比对，	Write/read-back of all-zero, all-one, checkerboard, address, LFSR and walking-1 patterns,
+本套件不直接驱动该硬件，而是用等效的软件图案发生器在系统可用内存上完成	The suite does not drive that hardware; an equivalent software pattern engine runs in free system memory
+可对内存通道生成任意图案并实时比对返回数据，用于平台导入期与内存故障定位。	It generates arbitrary patterns on a memory channel and compares the returned data in real time, for bring-up and fault localisation.
+图案进度	Patterns
+迭代轮次	Iterations
+覆盖率	Coverage
+带宽	Bandwidth
+有效带宽	Effective bandwidth
+有效带宽按读写往返计算	Effective bandwidth counts the read/write round trip
+读写往返平均	Round-trip average
+检测进行中	Test running
+检测已停止	Test stopped
+已手动停止	Stopped manually
+内存检测进行中，按 F6 或 ESC 停止	Memory test running, press F6 or ESC to stop
+使用当前图案配置开始扫描	Start with the current pattern selection
+已启用全部测试图案	All patterns enabled
+宽覆盖模式：最多测试 6 GB	Wide mode: up to 6 GB
+标准覆盖模式：最多测试 2 GB	Standard mode: up to 2 GB
+宽覆盖（最多 6 GB）	Wide (up to 6 GB)
+标准覆盖（最多 2 GB）	Standard (up to 2 GB)
+图案 %u/%u · %s · %u MB/s	Pattern %u/%u · %s · %u MB/s
+%u 个图案 · %s	%u patterns · %s
+按启用图案累计	Summed over the enabled patterns
+检测完成：发现 %u 个错误	Finished: %u errors
+检测完成：%u 个图案全部通过，带宽 %u MB/s	Finished: all %u patterns passed, %u MB/s
+存在位翻转或寻址故障	Bit flips or addressing faults
+尚未发现问题	Nothing found yet
+检测到的错误	Errors detected
+读回 / 期望	Read / expected
+0x%llX  期望 0x%llX	0x%llX  expected 0x%llX
+图案回读不一致	Pattern read-back mismatch
+未找到可测试的空闲内存区域	No free memory region available for testing
+请至少启用一个测试图案（空格 切换）	Enable at least one pattern (Space toggles)
+内存拓扑与错误分布	Memory topology and error distribution
+错误 %u	%u errors
+错误按物理地址折算到内存条 · T 打开颗粒视图	Errors mapped by physical address · T opens the chip view
+SMBIOS 未提供内存条信息	SMBIOS reports no module information
+# ---- DIMM / chip page ----
+DIMM 健康概览	DIMM health
+插槽摘要	Slot summary
+通道视图	Channel view
+socket · 通道	socket · channel
+颗粒定位	Chip localisation
+每格一个颗粒，数字为错误次数	One cell per chip · error count
+来自最近一次内存检测	From the last memory test
+未报错颗粒	Healthy chip
+%u 次错误已定位到具体颗粒	%u errors located on a specific chip
+运行内存检测后，此页按颗粒给出错误位置	Run the memory test and this page pinpoints the failing chip
+图案写入与回读完全一致，全部颗粒通过	Patterns read back exactly, every chip passed
+错误未落在可测试的内存区间上，无法定位颗粒	Errors fell outside the testable range, chips cannot be pinpointed
+数据位 → 颗粒映射（x%u，同一 rank 内，%s的数据位）	Data bit → chip map (x%u, within a rank, %s bits)
+SMBIOS 未提供已安装的内存条，无法给出颗粒映射	SMBIOS reports no installed module, no chip map available
+颗粒视图已打开	Chip view open
+DIMM 详情：%s	DIMM detail: %s
+丝印信息	Silkscreen
+电气参数	Electrical
+位宽	Bus width
+%u / %u 位	%u / %u bit
+%u / %u 位%s	%u / %u bit%s
+（推算）	(derived)
+DIMM 正面 - S%u R0	DIMM front - S%u R0
+DIMM 背面 - S%u R1	DIMM back - S%u R1
+此面无颗粒	No chips on this side
+无 SPD 信息	No SPD data
+x%u · %uR · %u 颗粒	x%u · %uR · %u chips
+x%u / %uR / %u 颗	x%u / %uR / %u chips
+x8 颗粒 · 	x8 chips · 
+%u 颗粒	%u chips
+颗粒位置由出错数据位反推，地址到 rank 的映射取决于固件，仅供参考	Chip position is derived from the failing data bit; address-to-rank mapping is firmware specific, for reference only
+出错数据位反推 DRAM 颗粒	Failing data bit → DRAM chip
+D%u 报错 %u 次 · 该 DIMM 共 %u 次错误，建议整条更换或降频复测	Chip D%u failed %u times · %u errors on this DIMM - replace the module or retest at a lower speed
+该 DIMM 共 %u 次错误（未能定位到具体颗粒）	%u errors on this DIMM (no chip could be identified)
+此 DIMM 未检测到错误	No errors on this DIMM
+S%u · CH%u · 槽位 %u	S%u · CH%u · slot %u
+内存拓扑：↑↓ 选择插槽，Enter 查看颗粒视图	Memory topology: ↑↓ select a slot, Enter opens the chip view
+颗粒	chip
+颗粒级错误定位	Per-chip error location
+SMBIOS 未提供 DIMM 插槽信息	SMBIOS reports no DIMM slot information
+SMBIOS 未提供该部件信息	SMBIOS reports no information for this component
+已安装的模块	Installed modules
+# ---- disk page ----
+设备详情与扫描	Device detail and scan
+块设备 %u	Block device %u
+设备 #%u	Device #%u
+设备路径	Device path
+设备属性	Device attributes
+设备容量为 0	Device capacity is 0
+接口	Interface
+健康状态	Health
+按 F5 开始只读顺序扫描，按 F9 扫描全部设备	F5 starts a read-only sequential scan, F9 scans every device
+只读扫描进行中，按 F6 停止	Read-only scan running, press F6 to stop
+扫描中 %u%% · %u MB/s	Scanning %u%% · %u MB/s
+尚未扫描	Not scanned
+未扫描	Not scanned
+扫描已完成	Scan finished
+扫描已停止	Scan stopped
+扫描异常	Scan error
+扫描完成：%u 个读取错误	Scan finished: %u read errors
+扫描完成：平均 %u MB/s，无读取错误	Scan finished: %u MB/s average, no read errors
+均 %u / 低 %u / 高 %u MB/s · 读取错误 %u	avg %u / min %u / max %u MB/s · %u read errors
+对当前选中的整盘做只读扫描	Read-only scan of the selected whole device
+扫描中	Scanning
+可写（支持擦除与覆写）	Writable (erase and overwrite supported)
+ATA 设备已识别（SMART 不可读）	ATA device identified (SMART unreadable)
+NVMe 控制器已识别	NVMe controller identified
+NVMe %s · %uC · 通电 %u h	NVMe %s · %uC · %u h powered
+SMART 可用 · %uC · 通电 %u h	SMART available · %uC · %u h powered
+SMART %s · %uC · 通电 %u h	SMART %s · %uC · %u h powered
+仅块设备访问（无 SMART 通道）	Block I/O only (no SMART channel)
+无可用的 SMART 通道	No SMART channel available
+重新读取 ATA / NVMe SMART 数据	Re-read ATA / NVMe SMART data
+刷新全部磁盘健康	Refresh all disk health
+已刷新 %u 个设备的健康信息	Health refreshed for %u devices
+已刷新设备健康信息	Device health refreshed
+未发现可用的块设备	No usable block device
+未发现设备	No device found
+未选择设备	No device selected
+请进入硬盘检测页扫描设备	Open the disk test page and scan a device
+累计写入	Total written
+上次运行 %u ms · 异常 %u 项	Last run %u ms · %u errors
+上次运行 %u.%u 秒 · 异常 %u 项	Last run %u.%u s · %u errors
+设备详情	Device detail
+速度	Speed
+# ---- erase page ----
+擦除算法	Erase algorithm
+擦除磁盘	Erase disk
+擦除次数	Erase count
+擦除记录	Erase log
+擦除回读校验	Erase read-back verify
+回读校验	Read-back verify
+R 范围	R range
+范围：%s · 回读校验：%s	Range: %s · read-back: %s
+整盘	Whole disk
+前 256 MB	First 256 MB
+快速清零	Quick zero fill
+随机覆写	Random overwrite
+Gutmann 精简	Gutmann (reduced)
+单遍写入 0x00，最快，适用于返修前快速清理	Single 0x00 pass, fastest, for a quick wipe before RMA
+0x00 → 0xFF → 随机数，三遍覆写，通用标准	0x00 → 0xFF → random, three passes, the common standard
+八遍固定与随机图案交替，覆盖旧式磁记录残留	Eight alternating fixed and random patterns for old magnetic media
+单遍加密随机数，速度接近清零，残留不可读	Single pass of random data, nearly as fast as zero fill
+选择设备后按 Enter 开始，擦除前会二次确认	Pick a device and press Enter; a second confirmation follows
+请先选择目标设备	Select a target device first
+未发现可擦除的块设备	No erasable block device found
+该设备为只读，无法擦除	The device is read-only and cannot be erased
+安全提示	Safety
+擦除属于破坏性操作，会清除分区表、引导记录与全部文件。	Erasing destroys the partition table, boot records and all data.
+擦除会覆盖分区表与全部数据，工具在开始前要求二次确认。	Erase overwrites the partition table and all data; a second confirmation is required.
+注意：该设备是当前启动盘，擦除后系统将无法启动。\n\n	Warning: this is the current boot disk, the system will not boot after erasing.\n\n
+%s擦除将覆盖分区表与全部文件，且无法恢复。	%sErasing overwrites the partition table and every file, and cannot be undone.
+目标 %s（%lu MB）\n算法 %s，共 %u 遍%s\n\n	Target %s (%lu MB)\nAlgorithm %s, %u passes%s\n\n
+，含回读校验	, with read-back verify
+擦除进行中，按 ESC 或 F6 中止	Erasing, press ESC or F6 to abort
+擦除已中止，磁盘内容可能处于不完整状态	Erase aborted, the disk content may be incomplete
+擦除过程中发生 I/O 错误	I/O error during erase
+已取消擦除	Erase cancelled
+已重新扫描启动卷	Boot volume rescanned
+已刷新	Refreshed
+%u 遍	%u passes
+%s · 第 %u/%u 步 · %u MB/s	%s · step %u/%u · %u MB/s
+%s 写入并回读 · %u MB/s · 异常 %u	%s write + verify · %u MB/s · %u errors
+中止于第 %u 遍	Aborted in pass %u
+校验失败 %u 块	%u blocks failed verification
+回读校验失败：首个不一致位置 0x%lx	Read-back failed: first mismatch at 0x%lx
+擦除完成：%u 遍 · %lu MB · 用时 %lu 秒	Erase finished: %u passes · %lu MB · %lu s
+已完成 %u 次擦除	%u erases completed
+擦除 %u 次 · %s	%u erases · %s
+本次会话尚无擦除记录	No erase recorded in this session
+擦除已停止	Erase stopped
+擦除失败	Erase failed
+硬盘擦除进行中	Disk erase running
+# ---- CPU page ----
+自检	Self-test
+整数 / SSE2 / AVX / RDRAND	Integer / SSE2 / AVX / RDRAND
+整数运算 ALU	Integer ALU
+SSE2 向量	SSE2 vector
+AVX 向量	AVX vector
+位操作指令	Bit operations
+TSC 计时器	TSC timer
+RDRAND 随机数	RDRAND
+缓存带宽	Cache bandwidth
+整数 MOPS	Integer MOPS
+浮点 MFLOPS	Float MFLOPS
+复制 MB/s	Copy MB/s
+顺序复制 %u MB/s	Sequential copy %u MB/s
+8 MB 缓冲区顺序复制带宽	8 MB buffer sequential copy bandwidth
+加减乘除、移位、字节序的逆运算校验	Reversibility of add/sub/mul/div, shifts and byte order
+SSE2 32 位整型通道加减错误	SSE2 32-bit integer lane add/sub error
+SSE2 向量乘法错误	SSE2 vector multiply error
+SSE2 双精度乘法错误	SSE2 double multiply error
+AVX 单精度通道 %u 错误	AVX single-precision lane %u error
+AVX 双精度通道 %u 错误	AVX double-precision lane %u error
+128 位整型通道与双精度通道	128-bit integer lanes and double lanes
+256 位 YMM 寄存器与浮点通道	256-bit YMM registers and float lanes
+256 位 YMM 通道通过	256-bit YMM lanes passed
+128 位整型与双精度通过	128-bit integer and double passed
+POPCNT / BSF / BSR 与逐位扫描比对	POPCNT / BSF / BSR compared with a bit scan
+POPCNT 结果与逐位统计不一致	POPCNT disagrees with the bit count
+BSF/BSR 结果与扫描结果不一致	BSF/BSR disagrees with the scan
+POPCNT/BSF/BSR 一致	POPCNT/BSF/BSR agree
+位清除循环计数不一致	Bit-clear loop count mismatch
+13×13 组边界值通过	13×13 boundary values passed
+用固件延时校准时间戳计数器	Timestamp counter calibrated against a firmware delay
+%u MHz，20 ms 偏差 < 10%%	%u MHz, 20 ms drift < 10%%
+20 ms 实测 %lu kHz	20 ms measured at %lu kHz
+TSC 频率	TSC frequency
+TSC 计时采样	TSC timing sample
+两次取样成功	Two samples taken
+硬件随机数指令取样	Hardware random sampling
+RDRAND 未返回有效随机数	RDRAND returned no valid value
+无 RDRAND 指令，已跳过	No RDRAND instruction, skipped
+处理器不支持 AVX，已跳过	CPU has no AVX support, skipped
+固件未启用 AVX 状态保存，已跳过	Firmware did not enable AVX state save, skipped
+整数加法不满足逆运算	Integer add is not reversible
+整数减法不满足逆运算	Integer sub is not reversible
+整数乘法不满足逆运算	Integer mul is not reversible
+整数累加结果异常	Integer accumulate result wrong
+整数余数计算异常	Integer remainder wrong
+除法与余数不自洽	Division and remainder disagree
+循环移位不满足逆运算	Rotate is not reversible
+逻辑移位结果错误	Logical shift result wrong
+字节序交换不自洽	Byte swap is inconsistent
+浮点累加结果异常	Float accumulate result wrong
+%u 线程 · Enter 开始自检	%u threads · Enter starts the self-test
+正在执行处理器自检，按 ESC 或 F6 中止	CPU self-test running, press ESC or F6 to abort
+自检已中止	Self-test aborted
+自检通过 · 整数 %u MOPS · 浮点 %u MFLOPS · 缓存 %u MB/s	Self-test passed · int %u MOPS · float %u MFLOPS · cache %u MB/s
+自检发现 %u 项异常	Self-test found %u faults
+自检完成	Self-test finished
+请先选择至少一个自检项目	Select at least one item first
+%u 项已选 · 异常 %u	%u selected · %u faults
+%u 项	%u items
+%u 线程 · 循环 %u 次 · 异常 %u	%u threads · %u loops · %u faults
+%u 线程 / %llu 次循环	%u threads / %llu loops
+%u 核 / %u 线程 · 基频 %u MHz	%u cores / %u threads · %u MHz base
+%u MHz（最大 %u MHz）	%u MHz (max %u MHz)
+CPU %s · 异常 %u · %u MOPS	CPU %s · %u faults · %u MOPS
+处理器吞吐测量	CPU throughput
+指令自检与吞吐测量	Instruction self-test and throughput
+处理器指令自检	CPU instruction self-test
+x86-64 · %u 线程	x86-64 · %u threads
+x86-64 · %u 逻辑 CPU	x86-64 · %u logical CPUs
+逻辑处理器	Logical CPU
+逻辑处理器 %u%s	Logical CPU %u%s
+指令集特性	Instruction set features
+绿色 = 支持	Green = supported
+处理器	Processor
+核心	Core
+无法测算缓存带宽	Cache bandwidth not measurable
+AVX 状态	AVX state
+# ---- stress page ----
+压力组件	Stress components
+持续时长	Duration
+压力测试参数无效	Invalid stress parameters
+压力测试开始，计划运行 %u 分 %u 秒	Stress started, planned for %u min %u s
+压力测试通过 · 运行 %u 秒 · 无异常	Stress passed · %u s · no faults
+压力测试已中止 · 运行 %u 秒 · 未发现异常	Stress aborted · %u s · no faults
+压力测试提前结束（没有可用的测试内存）	Stress ended early (no usable test memory)
+压力测试未在运行	Stress test is not running
+压力测试%s · %u 秒 · 捕获 %u 个异常	Stress%s · %u s · %u faults
+处理器压力	CPU stress
+内存压力测试	Memory stress
+多核压力测试	Multi-core stress
+MP Services 并行 AP 加压	Parallel AP load through MP Services
+内存压力流量	Memory throughput
+硬盘只读流量	Disk read throughput
+运行时长	Run time
+剩余 %s	%s left
+循环 %u 次 · 压力线程	%u loops · stress threads
+压力线程运行中	Stress threads running
+已选组件缺少目标项目，请用空格勾选	The selected component has no targets, use Space to check some
+请至少选择一个组件（C / M / D 开启）	Enable at least one component (C / M / D)
+硬盘压力使用只读随机读取，不会写入或擦除数据。\n	Disk stress issues random reads only, nothing is written or erased.\n
+硬盘只做随机读，不写入数据	Disk stress reads randomly and never writes
+随机只读并发流量	Concurrent read-only throughput
+同时运行多块盘的随机读可能降低其他组件的测量精度。	Random reads on several disks at once can reduce the accuracy of the other measurements.
+按 DIMM 划分写入回读	Windowed write/verify per DIMM
+随机读	Random read
+捕获异常	Faults caught
+内存 %s · 覆盖 %u%% · 图案 %u · 错误 %u	Memory %s · coverage %u%% · patterns %u · errors %u
+磁盘 %s · 已扫描 %u 台 · 错误 %u	Disks %s · %u scanned · %u errors
+会话摘要	Session summary
+%u 分 %02u 秒	%u min %02u s
+完成 %lu 秒	%lu s done
+计划	Planned
+开始	Start
+时长	Duration
+组件	Component
+# ---- tools page ----
+工具与操作	Tools and actions
+外部工具集成	External tool integration
+启动卷 EFI\TOOLS 目录	Boot volume EFI\TOOLS directory
+启动卷 %s · %s	Boot volume %s · %s
+外部 EFI 工具启动	External EFI tool launch
+将 UEFI_Test_Suite 的 .efi 工具放入启动卷的 EFI\TOOLS 目录，	Copy the .efi tools of UEFI_Test_Suite into the EFI\TOOLS folder on the boot volume, 
+仿真器启动时即可在此列出并直接运行，无需重新编译本套件。	they are listed here at boot and can be launched without rebuilding the suite.
+外部二进制，放入 EFI\TOOLS	External binaries, place them in EFI\TOOLS
+外部工具可放入启动卷 EFI\TOOLS 目录	External tools may be placed in EFI\TOOLS on the boot volume
+全部内置	All built-in
+未找到可运行的工具	No runnable tool found
+正在启动外部工具…	Launching the external tool…
+加载失败 0x%lx	Load failed 0x%lx
+失败 0x%lx	Failed 0x%lx
+%s 返回 0x%lx	%s returned 0x%lx
+转到内存检测并运行	Jump to the memory test and run it
+转到硬盘检测并扫描	Jump to the disk test and scan
+转到 CPU 检测并运行	Jump to the CPU test and run it
+运行检测后可用	Available after running a test
+已集成能力	Integrated features
+本次会话状态	Session state
+能力	Capability
+所在页面	Page
+# ---- about page ----
+关于本套件	About this suite
+版本 1.0 · 构建 %s %s	Version 1.0 · build %s %s
+诊断报告	Diagnostic report
+报告	Report
+运行环境	Environment
+所有检测均在内存中进行，除硬盘擦除外不对磁盘做任何写入。	All tests run in memory; apart from the disk erase nothing is written to disk.
+工具仅对整盘设备提供擦除，并在写入后回读校验。	Erase works on whole devices and verifies the result by reading it back.
+自检使用可逆性校验与逐位参考实现比对，吞吐数值为单线程测量，	The self-test uses reversibility checks against bit-exact references; throughput is single-threaded
+受固件环境与虚拟化影响仅作参考。	and is indicative only under firmware and virtualisation.
+缓存	Cache
+# ---- remaining labels and fragments ----
+ · 主处理器	 · primary CPU
+ · 启动盘	 · boot disk
+ · 外部镜像	 · external image
+ · 随机读	 · random read
+ 颗粒	 chips
+%s · %u 字节/扇区	%s · %u bytes/sector
+%s 随机读取 · %u MB/s · 异常 %u	%s random read · %u MB/s · %u faults
+%s（SMBIOS 未报速度）	%s (SMBIOS reports no speed)
+%u / %u 启用	%u / %u enabled
+%u / %u 已选择	%u / %u selected
+%u 个块设备 · %u 个启动项	%u block devices · %u boot options
+%u 字节	%u bytes
+%u 秒 · %u MB/s	%u s · %u MB/s
+%u 错误	%u errors
+0 次	0
+0x%llX (期望 0x%llX)	0x%llX (expected 0x%llX)
+ATA PASS-THRU / NVMe 日志	ATA PASS-THRU / NVMe log
+BIOS 日期	BIOS date
+EFI_BLOCK_IO 只读读盘	EFI_BLOCK_IO read-only scan
+HTML 报告导出	HTML report export
+UEFI_Test_Suite 组件	UEFI_Test_Suite components
+主处理器 · 兼做内存 / 硬盘加压	primary CPU · also loads memory / disk
+仅压力测试（HTML）	Stress test only (HTML)
+仅检测结果（HTML）	Test results only (HTML)
+仅系统信息（HTML）	System info only (HTML)
+以上全部文件（5 个）	All of the above (5 files)
+全部（完整 HTML 报告）	Everything (full report)
+内存 SPD 拓扑	Memory SPD topology
+内存图案检测	Memory pattern test
+内存拓扑页	Memory topology
+内存检测页	Memory test
+写入启动卷 UCTS-REPORT.HTM	Writes UCTS-REPORT.HTM to the boot volume
+写入覆写	Write and overwrite
+写后读比对	Write then read back
+制造商	Manufacturer
+加压中，未发现数据或指令异常	Under load, no data or instruction faults
+厂商	Vendor
+吞吐	Throughput
+吞吐测量	Throughput
+启动卷 UCTS-REPORT.HTM	Boot volume UCTS-REPORT.HTM
+启动盘	Boot disk
+在 CPU 检测页按 F5 开始自检	Press F5 on the CPU test page to run the self-test
+在位	Populated
+在内存检测页按 F5 开始扫描	Press F5 on the memory test page to scan
+在硬盘检测页按 F5 开始扫描	Press F5 on the disk test page to scan
+地址位	Address bits
+型号	Model
+完整通过	Fully passed
+实时状态	Live status
+导出 HTML 报告	Export an HTML report
+导出 HTML 报告到启动卷	Export HTML report
+导出诊断报告到启动卷	Export diagnostic reports to the boot volume
+将 UEFI_Test_Suite 的 .efi 工具放入启动卷的 EFI\TOOLS 目录，仿真器启动时即可在此列出并直接运行，无需重新编译本套件。	Copy the .efi tools into EFI\TOOLS on the boot volume; they are listed here on every boot.
+尚无操作记录	No action recorded yet
+尚未运行（按 F5 开始）	Not run yet (press F5)
+已启用	Enabled
+已定位到颗粒的错误	Errors located on a chip
+已导出 %u 个报告文件 · 失败 %u 个（启动卷根目录）	%u report files written · %u failed (boot volume root)
+已测试	Tested
+已测量	Measured
+平台信息系统信息	Platform / system
+异常 %u 项	%u faults
+异常记录	Fault log
+当前进度	Progress
+报告导出失败，请确认启动卷可写	Report export failed, check that the boot volume is writable
+报告导出失败：启动卷不可写（%s）	Report export failed: boot volume not writable (%s)
+报告已写入启动卷 UCTS-REPORT.HTM	Report written to the boot volume: UCTS-REPORT.HTM
+报告已导出并回读校验：%s	Report exported and verified by read-back: %s
+无块设备可用	No block device available
+无法创建 MP 事件	Cannot create the MP event
+无法启动 AP 压力线程	Cannot start the AP stress threads
+无法定位启动卷设备路径	Cannot resolve the boot volume device path
+未安装	Not installed
+本次会话已扫描 %u 个设备 · 累计读取 	%u devices scanned this session · read 
+本次会话暂无异常	No faults this session
+检测到错误	Errors detected
+环境与说明	Environment and notes
+硬盘健康 SMART	Disk health SMART
+硬盘顺序扫描	Sequential disk scan
+空插槽	Empty slot
+纯文本摘要（TXT）	Plain text summary (TXT)
+终点	End
+结论	Verdict
+缓冲区分配失败	Buffer allocation failed
+请键入 %s 确认：	Type %s to confirm:
+起点	Start
+运行于 %s · %s	Running on %s · %s
+运行后显示	Shown after a run
+进度与记录	Progress and records
+部件号	Part number
+配置	Configured
+随机读取失败	Random read failed
+项目	Item
+首个错误数据	First error data
+# ---- long paragraphs ----
+所有检测均在内存中进行，除硬盘擦除外不对磁盘做任何写入。结果可通过 F2 导出为 HTML，便于随工单归档。	All tests run in memory; apart from the disk erase nothing is written to disk. Results can be exported to HTML with F2 for archiving with a ticket.
+擦除属于破坏性操作，会清除分区表、引导记录与全部文件。工具仅对整盘设备提供擦除，并在写入后回读校验。	Erasing destroys the partition table, boot records and all data.
+自检使用可逆性校验与逐位参考实现比对，吞吐数值为单线程测量，受固件环境与虚拟化影响仅作参考。	The self-test checks reversibility against bit-exact references; throughput is a single-threaded figure and indicative only under firmware and virtualisation.
+硬盘压力使用只读随机读取，不会写入或擦除数据。\n同时运行多块盘的随机读可能降低其他组件的测量精度。	Disk stress issues random reads only, nothing is written or erased.\nRandom reads on several disks at once can reduce the accuracy of the other measurements.
+目标 %s（%lu MB）\n算法 %s，共 %u 遍%s\n\n%s擦除将覆盖分区表与全部文件，且无法恢复。	Target %s (%lu MB)\nAlgorithm %s, %u passes%s\n\n%sErasing overwrites the partition table and every file and cannot be undone.
+# ---- report HTML scaffolding ----
+<h2>CPU 检测</h2><table>\n	<h2>CPU test</h2><table>\n
+<h2>内存拓扑</h2><table>\n	<h2>Memory topology</h2><table>\n
+<h2>压力测试</h2><table>\n	<h2>Stress test</h2><table>\n
+<h2>处理器</h2><table>\n	<h2>Processor</h2><table>\n
+<h2>存储设备</h2>\n	<h2>Storage devices</h2>\n
+<h2>平台信息</h2><table>\n	<h2>Platform</h2><table>\n
+<h2>擦除记录</h2><table>\n	<h2>Erase log</h2><table>\n
+<header><h1>UEFI 组件测试套件 · 诊断报告</h1><p>	<header><h1>UEFI Component Test Suite · Diagnostic report</h1><p>
+<table style="margin-top:8px"><tr><th style="width:auto">插槽</th><th style="width:auto">容量</th><th style="width:auto">类型</th><th style="width:auto">速率</th><th style="width:auto">厂商</th><th style="width:auto">颗粒编号</th><th style="width:auto">布局</th><th style="width:auto">颗粒错误</th></tr>\n	<table style="margin-top:8px"><tr><th style="width:auto">Slot</th><th style="width:auto">Capacity</th><th style="width:auto">Type</th><th style="width:auto">Speed</th><th style="width:auto">Vendor</th><th style="width:auto">Part number</th><th style="width:auto">Layout</th><th style="width:auto">Chip errors</th></tr>\n
+<table><tr><td>未发现块设备</td></tr></table>\n	<table><tr><td>No block device found</td></tr></table>\n
+<table><tr><th style="width:auto">设备</th><th style="width:auto">容量</th><th style="width:auto">接口</th><th style="width:auto">健康</th><th style="width:auto">扫描</th><th style="width:auto">速度</th></tr>\n	<table><tr><th style="width:auto">Device</th><th style="width:auto">Capacity</th><th style="width:auto">Interface</th><th style="width:auto">Health</th><th style="width:auto">Scan</th><th style="width:auto">Speed</th></tr>\n
+<title>UCTS 诊断报告</title>\n<style>\n	<title>UCTS diagnostic report</title>\n<style>\n
+%s（%s）	%s (%s)
+%s：%s	%s: %s
+%u.%u（%s）	%u.%u (%s)
+← →	← →
+（0x%lX）	(0x%lX)
+（D%u ×%u）	(D%u x%u)
+%s %s · %s %s · 内存 %s · %s	%s %s · %s %s · RAM %s · %s
+%s · %u 条	%s · %u module
+%s · %u 条 · %u MT/s	%s · %u module · %u MT/s
+%s · %u 条内存	%s · %u module
+%s%s · %u 条内存	%s%s · %u module
+%u MHz · %u socket · %u 逻辑 CPU	%u MHz · %u socket · %u logical CPU
+%u 个 PCI/PCIe 设备 · %u 个端点 · %u 个网络接口	%u PCI/PCIe devices · %u endpoints · %u NICs
+%u 个 · %u 端点 · %u 网络	%u · %u ep · %u net
+%u 个设备 · %u 个端点 · %u 条链路	%u devices · %u endpoints · %u links
+%u 根桥 · %u 主机桥	%u root bridge · %u host bridge
+3D 显示控制器	3D controller
+ATA 控制器	ATA controller
+CPU / 内存 / PCIe 连接关系	CPU / memory / PCIe wiring
+IDE 控制器	IDE controller
+ISA/LPC 桥	ISA/LPC bridge
+MAC 地址	MAC address
+NVMe 控制器	NVMe controller
+PCI/PCIe 拓扑已重新扫描	PCI/PCIe topology rescanned
+PCIe 根桥	PCIe root complex
+PCIe 根端口	PCIe root port
+PCIe 设备	PCIe devices
+SAS 控制器	SAS controller
+SATA 控制器	SATA controller
+SMBus 控制器	SMBus controller
+T 打开完整视图	T full view
+USB 2 控制器	USB 2 controller
+USB 3 控制器	USB 3 controller
+USB 控制器	USB controller
+↑↓ 选择设备   Enter 定位块设备   F5 重新扫描	up/down select   Enter locate disk   F5 rescan
+下游总线	Downstream
+串行总线	Serial bus
+串行总线控制器	Serial bus controller
+主机桥	Host bridge
+以太网控制器	Ethernet controller
+全部总线	All buses
+其他	Other
+其他设备	Other device
+内存控制器	Memory controller
+包过滤状态 0x%X	Filter state 0x%X
+协处理器	Coprocessor
+厂商与设备	Vendor/device
+地址	Address
+处理加速器	Processing accelerator
+存储 %u · 网络 %u · 显示 %u · USB %u	Storage %u · Net %u · Disp %u · USB %u
+存储接口	Storage iface
+存储控制器	Storage controller
+存储控制器可按 Enter 跳到硬盘检测页	Enter on a storage controller opens Disk test
+尚未读取	not read yet
+已定位到该控制器挂载的块设备	Located the block device behind this controller
+当前启动盘	boot disk
+挂载块设备	Block device
+挂载设备	Attached
+数据盘	data disk
+无	none
+无线控制器	Wireless controller
+无线网卡	Wireless NIC
+显示	Display
+显示控制器	Display controller
+未发现 PCI/PCIe 设备	No PCI/PCIe device found
+未知厂商	Unknown vendor
+根桥	Root bridge
+网卡 %u	NIC %u
+桥	Bridge
+桥接设备	Bridge device
+桥的下游设备在左侧树中缩进显示	Downstream devices are indented in the tree
+次总线 %u · 从属总线 %u	Sec bus %u · sub bus %u
+端点统计	Endpoints
+类 %02X:%02X · 编程接口 %02X · 修订 %02X	Class %02X:%02X · progIf %02X · rev %02X
+类别	Class
+系统拓扑	Topology
+网络	Network
+该设备未被本套件直接使用	Not used directly by this suite
+说明	Note
+还有 %u 个设备 · ← → 逐项查看	%u more devices · left/right
+连接图	Wiring diagram
+链路	Link
+链路已连接	link up
+链路未连接	link down
+链路状态	Link state
+非 PCIe 链路	Non-PCIe link
+高清音频设备	HD audio device
+音频	Audio
+PCI/PCIe 设备	PCI/PCIe devices
+厂商:设备	Vendor:device
+挂载	Attached
+PCIe 设备与拓扑	PCIe devices
+配置空间 / 桥窗口 / 协商链路	config space / bridges / link
+系统拓扑页	Topology page
+报告包导出	Report bundle
+HTML 分节 + 纯文本，共 5 个文件	5 files: HTML sections + text
+切换页面（1-9 直跳，0 关于）	switch page (1-9 jump, 0 about)
+1-9 直跳页面 · 0 关于   F10 退出	1-9 jump · 0 about   F10 exit
+1-9 直跳页面 · 0 关于   F5 重新采集   F2 导出报告	1-9 jump · 0 about   F5 refresh   F2 report
+网卡不做链路吞吐测试，MAC 与链路状态见下方设备详情	NICs are not throughput-tested; see MAC and link state below
+%u 个设备 +%u 未列出	%u devices +%u not listed
+中断控制器	Interrupt controller
+DMA 控制器	DMA controller
+定时器	Timer
+实时时钟	Real-time clock
+系统外设	System peripheral
+串口控制器	Serial controller
+并行口控制器	Parallel port
+调制解调器	Modem
+通信控制器	Communication controller
+输入设备	Input device
+扩展坞	Docking station
+测量仪器	Instrument
+未报告	Not reported
+%u 个网络接口只有固件协议栈，没有对应的 PCI 节点	%u NICs exist only in the firmware stack, with no PCI node
+%u 个插槽 · %u 条在位 · %u 个通道	%u slots - %u populated - %u channels
+- / = 调 1 分 · PgUp/PgDn 调 5 分	- / = 1 min - PgUp/PgDn 5 min
+Tab 分组  ↑↓ 选择  空格 勾选  -/= 时长  Enter 开始	Tab group   up/down select   space check   -/= duration   Enter start
+↑ ↓	up/down
+↑↓ 滚动列表   1-9 直跳页面 · 0 关于   F5 重新采集   F2 导出报告	up/down scroll   1-9 jump - 0 about   F5 refresh   F2 report
+↑↓ 设备   空格 选算法   R 范围   V 校验   Enter 擦除	up/down device   space algorithm   R scope   V verify   Enter erase
+↑↓ 选择   Enter 打开   T 连接图   ← → 换页	up/down select   Enter open   T diagram   left/right page
+↑↓ 选择插槽：通道视图与颗粒定位会跟随滚动，Enter 打开颗粒视图	up/down selects a slot; the channel view and error list follow, Enter opens the chip view
+切换页内分组（压力测试）	next group inside a page (stress test)
+勾选 / 切换当前项或取值	check or cycle the current item
+在当前页的列表里移动选择	move the selection inside the page
+空格	space
+还有 %u 个设备 · 按 T 打开完整连接图	%u more devices - press T for the full diagram
+↑↓/PgUp/PgDn/Home/End 选择插槽   Enter 颗粒视图   Esc 返回	up/down/PgUp/PgDn/Home/End pick a slot   Enter chip view   Esc back
+空插槽没有颗粒信息，请选择一个已安装的内存条	An empty slot has no chips; pick an installed module
+Esc 关闭   ↑↓ 切换内存条   B 正/背面	Esc close   up/down switch DIMM   B side
+双击	double click
+↑↓ 或点击选择    Enter 确认    Esc 取消	up/down or click to pick    Enter confirm    Esc cancel
+在列表与长页面里上下移动	scroll lists and long pages
+指针 %s	pointer %s
+未发现，仅键盘可用	not found, keyboard only
+滚轮	wheel
+点击	click
+相对（普通鼠标）	relative (plain mouse)
+移动 %u 次 · 点击 %u 次 · 本页热区 %u 个	%u moves - %u clicks - %u targets on this page
+等同该行上的 Enter（打开、启动）	same as Enter on that row (open, launch)
+绝对 + 相对	absolute + relative
+绝对（KVM / 平板）	absolute (KVM / tablet)
+选中一行、切换页面或按下按钮	pick a row, change page or press a button
+点击 %u,%u	click %u,%u
+点击 %u,%u · %s	click %u,%u - %s
+光标位置 %u,%u · 屏幕 %ux%u	cursor %u,%u - screen %ux%u
+%u 秒 · 平均 %u MB/s	%u s - %u MB/s average
+S%u · 逻辑处理器 %u%s	S%u - logical processor %u%s
+当前图案	current pattern
+整体进度	patterns done
+本图案覆盖	this pattern
+<footer>由 UCTS v	<footer>Generated by UCTS v
+（UEFI Component Test Suite）生成 · 内存 / 存储 / 处理器检测 · 	 (UEFI Component Test Suite) - memory / storage / processor diagnostics - 
+<h2>内存检测（软件图案）</h2><table>\n	<h2>Memory test (software patterns)</h2><table>\n
+UEFI 组件测试套件 · 平台诊断与压力测试	UEFI Component Test Suite - platform diagnostics and stress tests
+共 11 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%	11 pages - Space checks - Enter opens - F2 exports - memory coverage %u%%
+地址/数据图案写入回读比对	Address and data pattern write / read back
+地址与数据图案写入回读自检	Address and data pattern write and read back self-test
+开发	Author
+开发信息	Developer
+版本 %s · 构建 %s %s	Version %s - build %s %s
+设计思路参考知乎专栏文章 zhuanlan.zhihu.com/p/2100653235568633192：把整机诊断拆成互相独立的页面，每页给出实时进度与结论。	Design inspired by zhuanlan.zhihu.com/p/2100653235568633192: split platform diagnostics into pages, each reporting live progress and a verdict.
+平台诊断	platform diagnostics
+←→	←→
+↑↓	↑↓
