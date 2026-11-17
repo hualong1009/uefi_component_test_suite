@@ -244,6 +244,7 @@ git push origin main --follow-tags
 | **Lenovo G220-B9**（2 × Xeon Platinum 8457C，96 核 192 线程；2 × 64 GB DDR5-4800 ECC；2 × 3.5 TB NVMe；UEFI 5.0 / AMI） | 117 个 PCI/PCIe 功能、111 端点、32 内存插槽（2 条装机）、192 逻辑处理器全部识别并可加压；远程 BMC KVM 下鼠标、键盘、报告导出、擦除确认均正常 |
 | **QEMU q35 + OVMF**（`edk2-stable202408`） | NVMe 与 SATA 设备识别、内存检测、硬盘扫描、DoD 三遍擦除（含回读校验）、CPU 七项自检、报告生成与回读比对 |
 | **纯光驱启动**（无硬盘） | ISO 能进主界面，全部页面可用 |
+| **BMC KVM 虚拟光驱**（AMI MegaRAC 4.06.0A） | 复位 BMC 后，Release 里的 ISO 可从 `UEFI: AMI Virtual CDROM0` 直接启动进主界面；未复位时 BMC 侧媒体服务会卡成 4.5 MB 空壳（见 [§11.1](#111-bmc-虚拟光驱挂上去却在启动菜单里看不到--客户机里读不出来)） |
 
 本文档中的截图都来自上面那台 G220-B9 的真实运行画面（1024×768）。
 
@@ -301,3 +302,38 @@ tools/build.sh          构建脚本（Windows Git Bash 与 Linux CI 通用）
 tools/mkiso.py          打可启动 ISO（El Torito FAT16 启动镜像 + ISO 9660 双入口）
 .github/workflows/      打 tag 时自动编译 + 打 ISO + 发布 Release
 ```
+
+---
+
+## 11. 常见问题
+
+### 11.1 BMC 虚拟光驱挂上去却在启动菜单里看不到 / 客户机里读不出来
+
+现象（AMI MegaRAC 上遇到过）：
+
+- 客户机里 `/dev/sr0` 会出现，但容量固定是 4.5 MB（2306 个 2048 字节块），**换哪个 ISO 都一样**；
+- 每次读都报 `Sense Key : Medium Error` / `Add. Sense: Unrecovered read error`；
+- 开机 `F11` 启动菜单里没有 `UEFI: AMI Virtual CDROM0` 这一项。
+
+这不是 ISO 的问题：把镜像换成 63 MB 的 Alpine 也一样，BMC 侧那张"光驱"只剩一个空壳，
+读请求全部被回成介质错误。真正的处理办法是**复位 BMC**：
+
+1. 登录 BMC → Maintenance → Service Reset；
+2. 选中 **Reset BMC** 保存，等 1–2 分钟 BMC 重启回来（只重启 BMC，主机不受影响）；
+3. 重新打开 KVM → Browse 选 ISO → Start Media Redirection；
+4. 开机按 `F11`，菜单里就会出现 `UEFI: AMI Virtual CDROM0 1.00`，选中即可进本套件。
+
+复位后可以顺手自证一下：客户机里 `blockdev --getsize64 /dev/sr0` 应该等于 ISO 的实际字节数，
+`dd if=/dev/sr0 bs=2048 skip=16 count=1 | md5sum` 与本地 ISO 同一块完全一致。
+
+两个容易踩的点：
+
+- KVM 虚拟光驱是**客户端重定向**：ISO 由浏览器读取后经 `/cd-server` 通道送给 BMC，因此从挂载
+  到引导结束 **KVM 页面必须保持打开**，关掉就等于拔盘。BMC 自身不支持把镜像存到本地或从
+  网络共享拉取时（`local_media_support` / `remote_media_support` 为 0），也只有这一条路。
+- 该平台 POST 期间 `F11` 才是启动菜单，`F12` 是 PXE——按 `F12` 会一路走到网络引导。
+
+### 11.2 引导后中文显示为空白方框
+
+字库是编译期光栅化进二进制的；若用 `SKIP_FONT=1` 复用了仓库里的 `src/generated/font_data.c`
+就一定有字。自己重新生成时请确认系统里有 Consolas / 等线（DengXian）字体。
