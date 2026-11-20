@@ -21,9 +21,29 @@ volatile BOOLEAN gBusy;
 UI_THEME gTheme;
 
 static const char *const gNavLabels[] = {
-  "概览", "系统信息", "系统拓扑", "内存检测", "内存拓扑", "硬盘检测", "硬盘擦除",
-  "CPU 检测", "核间延迟", "内存带宽", "压力测试", "工具集", "关于"
+  "概览", "系统信息", "系统拓扑", "内存检测", "内存拓扑", "硬盘检测",
+  "CPU 检测", "核间延迟", "内存带宽", "压力测试", "硬盘擦除", "工具集", "关于"
 };
+
+/* icon kinds are independent of the page index, so keep the list explicit */
+static const UINT32 gNavIcons[] = {
+  0,                      /* overview   */
+  1,                      /* chip       */
+  11,                     /* bus tree   */
+  2,                      /* memory     */
+  3,                      /* dimm       */
+  4,                      /* disk       */
+  6,                      /* cpu        */
+  15,                     /* heat matrix*/
+  16,                     /* bar chart  */
+  7,                      /* stress     */
+  5,                      /* erase      */
+  8,                      /* tools      */
+  17                      /* info       */
+};
+
+/* the first page of the second navigation group */
+#define NAV_GROUP2_FROM PAGE_LATENCY
 
 static VOID ThemeInit(VOID)
 {
@@ -337,7 +357,7 @@ static VOID DrawSidebar(VOID)
   for (i = 0; i < gPageCount; i++) {
     GFX_RECT item = { 10, y, UI_SIDEBAR_W - 20, 36 };
     BOOLEAN sel = (i == gApp.Page);
-    if (i == 8) {
+    if (i == NAV_GROUP2_FROM) {
       y += 10;
       GfxText(18, y, "工具", gTheme.Muted, 1);
       y += 22;
@@ -347,7 +367,7 @@ static VOID DrawSidebar(VOID)
       GfxFillRound(item, 8, gTheme.SidebarSel);
       GfxFillRound((GFX_RECT){ item.X + 1, item.Y + 8, 3, 20 }, 2, gTheme.Primary);
     }
-    UiIcon(i, item.X + 14, item.Y + 9, 18, sel ? gTheme.Primary : gTheme.SubText);
+    UiIcon(gNavIcons[i], item.X + 14, item.Y + 9, 18, sel ? gTheme.Primary : gTheme.SubText);
     GfxTextClipped(item.X + 44, item.Y + 10, item.W - 48, gNavLabels[i],
                    sel ? gTheme.SidebarSelText : gTheme.Text, 1);
     UiHitNav(item, i);
@@ -1361,6 +1381,11 @@ VOID UiIcon(UINT32 kind, UINT32 x, UINT32 y, UINT32 size, UINT32 color)
         }
       }
     }
+    break;
+  case 17: /* info: circled dot and stem */
+    GfxCircle(x + s / 2, y + s / 2, s / 2 - 1, color);
+    GfxFillCircle(x + s / 2, y + s / 3, 2, color);
+    GfxFillRect((GFX_RECT){ x + s / 2 - 1, y + s / 2 - 1, 3, s / 3 }, color);
     break;
   case 16: /* bar chart: three columns of different height */
     {

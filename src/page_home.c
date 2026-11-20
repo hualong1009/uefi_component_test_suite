@@ -25,11 +25,11 @@ static const HOME_ENTRY gHomeEntries[] = {
   { "内存检测", "地址与数据图案写入回读自检",      PAGE_MEM,     2 },
   { "内存拓扑", "插槽 / rank / 颗粒级错误定位",     PAGE_DIMM,    3 },
   { "硬盘检测", "SMART / NVMe 健康与顺序读扫描",    PAGE_DISK,    4 },
-  { "硬盘擦除", "DoD / Gutmann 多遍覆写 + 回读校验", PAGE_ERASE,   5 },
   { "CPU 检测", "整数 / FPU / 向量指令集自检",      PAGE_CPU,     6 },
   { "核间延迟", "处理器间缓存行往返延迟热力图",     PAGE_LATENCY, 15 },
   { "内存带宽", "核心到各内存域的带宽热力图",       PAGE_BW,      16 },
   { "压力测试", "多核 / 内存 / 硬盘持续加压计时",    PAGE_STRESS,  7 },
+  { "硬盘擦除", "DoD / Gutmann 多遍覆写 + 回读校验", PAGE_ERASE,   5 },
   { "工具集",   "启动管理器与外部诊断工具",         PAGE_TOOLS,   8 }
 };
 
