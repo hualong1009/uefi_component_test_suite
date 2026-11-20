@@ -15,6 +15,7 @@ enum {
   PAGE_ERASE,
   PAGE_CPU,
   PAGE_LATENCY,
+  PAGE_BW,
   PAGE_STRESS,
   PAGE_TOOLS,
   PAGE_ABOUT,
@@ -29,6 +30,10 @@ VOID    PageHomePoint(UINT32 row);
 VOID    PageLatencyEnter(VOID);
 VOID    PageLatencyDraw(GFX_RECT content);
 BOOLEAN PageLatencyKey(EFI_INPUT_KEY key);
+
+VOID    PageBwEnter(VOID);
+VOID    PageBwDraw(GFX_RECT content);
+BOOLEAN PageBwKey(EFI_INPUT_KEY key);
 
 VOID    PageTopoEnter(VOID);
 VOID    PageTopoDraw(GFX_RECT content);

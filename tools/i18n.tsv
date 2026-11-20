@@ -126,7 +126,7 @@ Tab 分组  ↑↓ 选择  空格 勾选  ← → 时长  Enter 开始	Tab  ↑�
 ↑↓ 设备   ← → 算法   R 范围   V 校验   Enter 擦除	↑↓ device   ← → algorithm   R range   V verify   Enter erase
 ↑↓ 选择    Enter 确认    Esc 取消	↑↓ select    Enter confirm    Esc cancel
 ↑↓ 选择   Enter 启动   F5 重新扫描	↑↓ select   Enter launch   F5 rescan
-↑↓ 选择   空格 勾选   F5 运行   F7 全选   F8 核心   L 核间延迟	arrows pick   space toggle   F5 run   F7 all   F8 core   L latency
+↑↓ 选择   空格 勾选   F5 运行   F7 全选   F8 核心   L 延迟   B 带宽	up/down select   Space checks   F5 run   F7 all   F8 core   L latency   B bandwidth
 ↑↓ 选择设备   F5 扫描   F9 扫描全部   F6 停止	↑↓ device   F5 scan   F9 scan all   F6 stop
 ↑↓/←→ 选择插槽   Enter 颗粒视图   Esc 返回	↑↓/←→ slot   Enter chip view   Esc back
 ↑↓/←→ 选择插槽，Enter 打开颗粒视图	↑↓/←→ slot, Enter opens the chip view
@@ -897,7 +897,7 @@ F6 停止	F6 stop
 跨插槽平均 %u.%u ns（%u 个方向）	cross socket average %u.%u ns (%u directions)
 单插槽平台，无跨片数据	single socket platform, no cross socket data
 P0-P1 %u.%u ~ %u.%u ns	P0-P1 %u.%u ~ %u.%u ns
-↑↓←→ 选择处理器对   Z 放大   F5 测量   F6 停止	arrows select a pair   Z zoom   F5 measure   F6 stop
+↑↓←→ 选择处理器对   Z 放大   F5 测量   F6 停止	up/down row   [ ] column   Z zoom   F5 measure   F6 stop
 处理器间缓存行往返延迟热力图	cache line round trip latency between processors
 规模	scale
 最小 / 最大	min / max
@@ -911,3 +911,54 @@ P0-P1 %u.%u ~ %u.%u ns	P0-P1 %u.%u ~ %u.%u ns
 核间延迟页	latency page
 延迟 %s · 中位 %u.%u ns	latency %s, median %u.%u ns
 CPUID	CPUID
+%u / %u 采样	%u / %u samples
+%u MB / 次	%u MB each
+%u 个逻辑处理器 · %u 个内存域 · %u 个插槽	%u logical processors · %u memory domains · %u sockets
+%u 逻辑处理器 · %u 内存域	%u logical processors · %u memory domains
+
+<table><tr><th style="width:auto">内存域</th>	<table><tr><th style="width:auto">Domain</th>
+	<th style="width:auto">all cores reading</th></tr>
+
+SRAT 未提供分域内存，各列共用同一缓冲区	SRAT reports no per-domain memory, every column shares one buffer
+SRAT 未提供分域内存，各列的物理放置并不确定	SRAT reports no per-domain memory, column placement is unknown
+↑↓←→ 选择处理器与内存域   Z 放大   F5 测量   F6 停止	arrows select core and domain   Z zoom   F5 measure   F6 stop
+以及每个内存域各自能跑到的上限	and the ceiling of every memory domain on its own
+全核	all cores
+全核合计	all cores total
+全核合计 %u.%u GB/s	all cores %u.%u GB/s
+全核合计（本地内存）	all cores (local memory)
+全部中位（单核）	median (single core)
+共 %u 个采样 · 每次 %u MB · 按 F5 开始	%u samples · %u MB each · press F5
+内存域	Memory domain
+内存带宽	Bandwidth
+内存带宽测量完成	memory bandwidth measurement complete
+内存带宽热力图	memory bandwidth heat map
+内存带宽矩阵	memory bandwidth matrix
+内存放置	placement
+单核	per core
+单核峰值	peak single core
+单核峰值 %u.%u GB/s	peak %u.%u GB/s
+单核采样	sample per core
+可用内存不足以放置测量缓冲区	not enough free memory for the measurement buffers
+已测单元	cells measured
+带宽测量失败	bandwidth measurement failed
+带宽测量已中止，矩阵不完整	measurement aborted, matrix incomplete
+带宽统计	bandwidth statistics
+总带宽	aggregate
+按 F5 测量每个处理器到各内存域的读取带宽	press F5 to measure every core reading each memory domain
+本地 %u 格 / 远端 %u 格	%u local / %u remote cells
+本地内存	local memory
+本地内存（单核）	local memory (single core)
+核心到各内存域的带宽热力图	core to memory domain bandwidth heat map
+每次采样	per sample
+测量后显示所有核心同时读取的总带宽	after a run: total bandwidth with every core streaming
+远端内存	remote memory
+远端内存（单核）	remote memory (single core)
+远端是本地内存的 %u.%u 倍	remote is %u.%u x local
+<h2>内存带宽</h2><table>\n	<h2>Memory bandwidth</h2><table>\n
+<th style="width:auto">全核同时读</th></tr>\n	<th style="width:auto">all cores reading</th></tr>\n
+↑↓ 选行   [ ] 换列   N 换插槽   Z 放大   F5 测量   F6 停止	up/down row   [ ] column   N socket   Z zoom   F5 measure   F6 stop
+↑↓ 选行   [ ] 换列   N 换内存域   Z 放大   F5 测量   F6 停止	up/down row   [ ] column   N domain   Z zoom   F5 measure   F6 stop
+共 12 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%	12 pages - Space checks - Enter opens - F2 exports - memory coverage %u%%
+%u 个插槽 · %u 个采样 · 每次 %u MB · 按 F5 开始	%u sockets · %u samples · %u MB each · press F5
+%u 个逻辑处理器 · %u 个内存域	%u logical processors · %u memory domains

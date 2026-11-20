@@ -513,6 +513,61 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
     SbAdd(&sb, "</table>\n");
   }
 
+  /* ---- memory bandwidth ---- */
+  SbAdd(&sb, "<h2>内存带宽</h2><table>\n");
+  UiStrPrintf(num, sizeof(num), "%s", gResults.BwTested ? L("已执行") : L("未执行"));
+  RowKV(&sb, "状态", num);
+  if (gResults.BwTested) {
+    UiStrPrintf(num, sizeof(num), "%u 逻辑处理器 · %u 内存域", gResults.BwCpus,
+                gResults.BwDoms);
+    RowKV(&sb, "规模", num);
+    UiStrPrintf(num, sizeof(num), "%u MB / 次", gResults.BwBytes);
+    RowKV(&sb, "单核采样", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwLocalMbs / 10,
+                gResults.BwLocalMbs % 10);
+    RowKV(&sb, "本地内存（单核）", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwRemoteMbs / 10,
+                gResults.BwRemoteMbs % 10);
+    RowKV(&sb, "远端内存（单核）", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwMedianMbs / 10,
+                gResults.BwMedianMbs % 10);
+    RowKV(&sb, "全部中位（单核）", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ~ %u.%u GB/s", gResults.BwMinMbs / 10,
+                gResults.BwMinMbs % 10, gResults.BwMaxMbs / 10, gResults.BwMaxMbs % 10);
+    RowKV(&sb, "最小 / 最大", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwTotalMbs / 10,
+                gResults.BwTotalMbs % 10);
+    RowKV(&sb, "全核合计", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwPeakMbs / 10,
+                gResults.BwPeakMbs % 10);
+    RowKV(&sb, "单核峰值", num);
+    UiStrPrintf(num, sizeof(num), "%u ms", gResults.BwElapsedMs);
+    RowKV(&sb, "耗时", num);
+  }
+  SbAdd(&sb, "</table>\n");
+  if (gResults.BwTested && gResults.BwDoms > 0) {
+    UINT32 bd;
+    SbAdd(&sb, "<table><tr><th style=\"width:auto\">内存域</th>");
+    SbAdd(&sb, "<th style=\"width:auto\">全核同时读</th></tr>\n");
+    for (bd = 0; bd < gResults.BwDoms && bd < 8; bd++) {
+      UiStrPrintf(num, sizeof(num), "N%u", bd);
+      SbAdd(&sb, "<tr><th>");
+      SbAdd(&sb, num);
+      SbAdd(&sb, "</th>");
+      if (gResults.BwDomMbs[bd] == 0) {
+        SbAdd(&sb, "<td>--</td>");
+      } else {
+        UiStrPrintf(num, sizeof(num), "%u.%u GB/s", gResults.BwDomMbs[bd] / 10,
+                    gResults.BwDomMbs[bd] % 10);
+        SbAdd(&sb, "<td>");
+        SbAdd(&sb, num);
+        SbAdd(&sb, "</td>");
+      }
+      SbAdd(&sb, "</tr>\n");
+    }
+    SbAdd(&sb, "</table>\n");
+  }
+
   }
 
   /* ---- stress ---- */

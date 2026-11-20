@@ -285,5 +285,15 @@ BOOLEAN PageCpuKey(EFI_INPUT_KEY key)
     UiSwitchPage(PAGE_LATENCY);
     return TRUE;
   }
+  /* and how much memory traffic each of them can pull */
+  if (key.UnicodeChar == 'b' || key.UnicodeChar == 'B') {
+    UiSwitchPage(PAGE_BW);
+    return TRUE;
+  }
+  /* and how much memory traffic each of them can pull */
+  if (key.UnicodeChar == 'b' || key.UnicodeChar == 'B') {
+    UiSwitchPage(PAGE_BW);
+    return TRUE;
+  }
   return FALSE;
 }

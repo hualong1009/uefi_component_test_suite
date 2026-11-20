@@ -22,7 +22,7 @@ UI_THEME gTheme;
 
 static const char *const gNavLabels[] = {
   "概览", "系统信息", "系统拓扑", "内存检测", "内存拓扑", "硬盘检测", "硬盘擦除",
-  "CPU 检测", "核间延迟", "压力测试", "工具集", "关于"
+  "CPU 检测", "核间延迟", "内存带宽", "压力测试", "工具集", "关于"
 };
 
 static VOID ThemeInit(VOID)
@@ -1359,6 +1359,20 @@ VOID UiIcon(UINT32 kind, UINT32 x, UINT32 y, UINT32 size, UINT32 color)
         for (cx = 0; cx < 3; cx++) {
           GfxFillRect((GFX_RECT){ x + cx * (b + 1), y + cy * (b + 1), b, b }, color);
         }
+      }
+    }
+    break;
+  case 16: /* bar chart: three columns of different height */
+    {
+      UINT32 w = s > 11 ? s / 4 : 2;
+      UINT32 gapx = s > 11 ? (s - 3 * w) / 2 : 1;
+      UINT32 hs[3];
+      UINT32 i;
+      hs[0] = s / 2;
+      hs[1] = s - 2;
+      hs[2] = (s * 2) / 3;
+      for (i = 0; i < 3; i++) {
+        GfxFillRect((GFX_RECT){ x + i * (w + gapx), y + s - hs[i], w, hs[i] }, color);
       }
     }
     break;

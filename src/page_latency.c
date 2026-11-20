@@ -249,13 +249,35 @@ BOOLEAN PageLatencyKey(EFI_INPUT_KEY key)
     gLatFirst = 0;
     return TRUE;
   }
-  switch (key.ScanCode) {
-  case SCAN_LEFT:
+  /* left/right always change pages, so the column axis has its own keys */
+  if (key.UnicodeChar == '[') {
     LatMove(0, -1);
-    break;
-  case SCAN_RIGHT:
+    return TRUE;
+  }
+  if (key.UnicodeChar == ']') {
     LatMove(0, 1);
-    break;
+    return TRUE;
+  }
+  if (key.UnicodeChar == 'n' || key.UnicodeChar == 'N') {
+    UINT32 sock = gLatCpus[gLatCol].Socket + 1;
+    if (sock >= gLat.SocketCount) {
+      sock = 0;
+    }
+    while (gLatCol + 1 < n && gLatCpus[gLatCol].Socket != sock) {
+      gLatCol++;
+    }
+    return TRUE;
+  }
+  if (key.UnicodeChar == 'p' || key.UnicodeChar == 'P') {
+    UINT32 sock = gLatCpus[gLatCol].Socket;
+    sock = sock ? sock - 1 : (gLat.SocketCount ? gLat.SocketCount - 1 : 0);
+    gLatCol = 0;
+    while (gLatCol + 1 < n && gLatCpus[gLatCol].Socket != sock) {
+      gLatCol++;
+    }
+    return TRUE;
+  }
+  switch (key.ScanCode) {
   case SCAN_UP:
     LatMove(-1, 0);
     break;
@@ -317,11 +339,22 @@ static VOID DrawMatrixCard(GFX_RECT card)
 
   LatRange(&lo, &hi);
 
-  win = (gLatZoom && n > LAT_ZOOM) ? LAT_ZOOM : n;
+  win = n;
   readoutY = inner.Y + inner.H - 76;
   areaW = inner.W > 76 ? inner.W - 76 : 1;         /* left axis labels */
   areaH = (readoutY > inner.Y + 80) ? readoutY - inner.Y - 60 : 1;
   side = areaW < areaH ? areaW : areaH;
+  if (gLatZoom && n > 8) {
+    /* a zoom window is only worth it while a cell can still hold a number */
+    UINT32 fit = side / 40;
+    if (fit < 8) {
+      fit = 8;
+    }
+    if (fit > LAT_ZOOM) {
+      fit = LAT_ZOOM;
+    }
+    win = (fit < n) ? fit : n;
+  }
   cell = side / win;
   if (cell < 2) {
     cell = 2;
@@ -394,7 +427,10 @@ static VOID DrawMatrixCard(GFX_RECT card)
       crect.W = cell;
       crect.H = cell;
       if (gLatZoom && v && cell >= 24) {
-        UiStrPrintf(num, sizeof(num), "%u", (v + 5) / 10);
+        UiStrPrintf(num, sizeof(num), "%u.%u", v / 10, v % 10);
+        if ((UINT32)GfxTextWidth(num, 1) + 6 > cell) {
+          UiStrPrintf(num, sizeof(num), "%u", (v + 5) / 10);
+        }
         GfxTextCenter(crect.X, cell, crect.Y + (cell - 16) / 2, num,
                       (v > (hi + lo) / 2) ? gTheme.OnPrimary : gTheme.Text, 1);
       }
@@ -558,8 +594,9 @@ static VOID DrawStatsCard(GFX_RECT card)
   DrawStatRow(&col, "最大", gLat.MaxNs10, gTheme.Crit);
   if (gLat.CrossNs10 && gLat.IntraNs10) {
     char buf[64];
-    UINT32 ratio = gLat.CrossNs10 * 100 / (gLat.IntraNs10 ? gLat.IntraNs10 : 1);
-    UiStrPrintf(buf, sizeof(buf), "跨插槽是同插槽的 %u.%u 倍", ratio / 100, ratio % 100);
+    UINT32 ratio = gLat.CrossNs10 * 1000 / (gLat.IntraNs10 ? gLat.IntraNs10 : 1);
+    UiStrPrintf(buf, sizeof(buf), "跨插槽是同插槽的 %u.%u 倍", ratio / 1000,
+                ratio % 1000 / 100);
     GfxTextClipped(col.X, col.Y + 4, col.W, buf, gTheme.SubText, 1);
   }
 }

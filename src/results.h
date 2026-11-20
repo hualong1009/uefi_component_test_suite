@@ -72,6 +72,22 @@ typedef struct {
   UINT32  LatSocketCount;
   UINT32  LatSockNs10[8][8];
 
+  /* memory bandwidth page */
+  BOOLEAN BwTested;
+  UINT32  BwCpus;
+  UINT32  BwDoms;
+  UINT32  BwCells;
+  UINT32  BwElapsedMs;
+  UINT32  BwBytes;          /* MiB per single core sample */
+  UINT32  BwMedianMbs;
+  UINT32  BwLocalMbs;
+  UINT32  BwRemoteMbs;
+  UINT32  BwMinMbs;
+  UINT32  BwMaxMbs;
+  UINT32  BwTotalMbs;
+  UINT32  BwPeakMbs;
+  UINT32  BwDomMbs[8];
+
   /* per component health: 0 unknown, 1 ok, 2 warn, 3 critical */
   UINT32  HealthMem;
   UINT32  HealthDisk;
