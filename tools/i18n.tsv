@@ -126,7 +126,7 @@ Tab 分组  ↑↓ 选择  空格 勾选  ← → 时长  Enter 开始	Tab  ↑�
 ↑↓ 设备   ← → 算法   R 范围   V 校验   Enter 擦除	↑↓ device   ← → algorithm   R range   V verify   Enter erase
 ↑↓ 选择    Enter 确认    Esc 取消	↑↓ select    Enter confirm    Esc cancel
 ↑↓ 选择   Enter 启动   F5 重新扫描	↑↓ select   Enter launch   F5 rescan
-↑↓ 选择   空格 勾选   F5 运行   F7 全选   F8 核心	↑↓ select   Space check   F5 run   F7 all   F8 cores
+↑↓ 选择   空格 勾选   F5 运行   F7 全选   F8 核心   L 核间延迟	arrows pick   space toggle   F5 run   F7 all   F8 core   L latency
 ↑↓ 选择设备   F5 扫描   F9 扫描全部   F6 停止	↑↓ device   F5 scan   F9 scan all   F6 stop
 ↑↓/←→ 选择插槽   Enter 颗粒视图   Esc 返回	↑↓/←→ slot   Enter chip view   Esc back
 ↑↓/←→ 选择插槽，Enter 打开颗粒视图	↑↓/←→ slot, Enter opens the chip view
@@ -849,3 +849,64 @@ UEFI 组件测试套件 · 平台诊断与压力测试	UEFI Component Test Suite
 平台诊断	platform diagnostics
 ←→	←→
 ↑↓	↑↓
+# ---- inter-core latency ----
+核间延迟	core latency
+核间延迟热力图	inter-core latency heat map
+测量中	measuring
+F5 重测 · Z 放大	F5 remeasure · Z zoom
+F5 重测	F5 remeasure
+F5 测量	F5 measure
+按 F5 测量处理器之间的缓存行往返延迟	press F5 to measure the cache line round trip between processors
+中位延迟 %u.%u ns	median latency %u.%u ns
+延迟测量已中止，矩阵不完整	measurement aborted, matrix incomplete
+部分处理器对未能完成测量	some processor pairs did not complete
+核间延迟测量完成	inter-core latency measurement complete
+未找到可用的处理器服务，无法测量	no processor services available, cannot measure
+延迟测量失败	latency measurement failed
+正在停止测量…	stopping the measurement...
+核间延迟矩阵	inter-core latency matrix
+%u 个逻辑处理器 · %u 个插槽 · %u 个物理核心	%u logical processors · %u sockets · %u physical cores
+共 %u 个处理器对 · 每对约 1 微秒 · 按 F5 开始	%u processor pairs · about 1 microsecond each · F5 to start
+固件未提供处理器物理位置，矩阵按枚举顺序排列	firmware reported no physical location, matrix follows enumeration order
+同一处理器	same processor
+跨插槽	cross socket
+同核双线程	same core, two threads
+同插槽	same socket
+%s  ->  %s   %s ns   %s	%s  ->  %s   %s ns   %s
+放大视图 %u..%u（Z 退出）	zoom %u..%u (Z to exit)
+测量状态	measurement state
+%u / %u 处理器对	%u / %u processor pairs
+F6 停止	F6 stop
+矩阵维度	matrix size
+%s 个	%s
+插槽 / 核心 / 线程	sockets / cores / threads
+已测处理器对	pairs measured
+固件拓扑	firmware topology
+完整	complete
+延迟统计	latency statistics
+单程	one way
+同插槽跨核	same socket, other core
+全部中位	overall median
+最小	min
+最大	max
+跨插槽是同插槽的 %u.%u 倍	cross socket is %u.%u times the same socket
+插槽间延迟矩阵	socket to socket latency
+测量后显示各插槽之间的平均延迟	per socket pair medians after a run
+多插槽机器可借此判断跨片互连是否对称	on multi socket systems this shows whether the links are symmetric
+当前为单插槽平台	single socket platform
+跨插槽平均 %u.%u ns（%u 个方向）	cross socket average %u.%u ns (%u directions)
+单插槽平台，无跨片数据	single socket platform, no cross socket data
+P0-P1 %u.%u ~ %u.%u ns	P0-P1 %u.%u ~ %u.%u ns
+↑↓←→ 选择处理器对   Z 放大   F5 测量   F6 停止	arrows select a pair   Z zoom   F5 measure   F6 stop
+处理器间缓存行往返延迟热力图	cache line round trip latency between processors
+规模	scale
+最小 / 最大	min / max
+%u 逻辑处理器 · %u 插槽 · %u 对	%u logical processors · %u sockets · %u pairs
+%u 毫秒	%u ms
+<table><tr><th style="width:auto">插槽</th>	<table><tr><th style="width:auto">Socket</th>
+中位	median
+<h2>核间延迟</h2><table>\n	<h2>Inter-core latency</h2><table>\n
+核间延迟热力图	inter-core latency heat map
+逐对缓存行往返 / 插槽分块	per pair cache line round trip, blocked by socket
+核间延迟页	latency page
+延迟 %s · 中位 %u.%u ns	latency %s, median %u.%u ns

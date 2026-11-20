@@ -4,6 +4,9 @@
 
 #include "uefi.h"
 
+/* kept as a macro so a trace line does not need a formatted escape */
+#define DBG_NL "\n"
+
 #ifdef UCTS_DEBUG
 VOID DbgStr(const char *s);
 VOID DbgHex(UINT64 value);

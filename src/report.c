@@ -454,6 +454,65 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
   RowKV(&sb, "吞吐", num);
   SbAdd(&sb, "</table>\n");
 
+  /* ---- inter core latency ---- */
+  SbAdd(&sb, "<h2>核间延迟</h2><table>\n");
+  UiStrPrintf(num, sizeof(num), "%s", gResults.LatTested ? L("已执行") : L("未执行"));
+  RowKV(&sb, "状态", num);
+  if (gResults.LatTested) {
+    UiStrPrintf(num, sizeof(num), "%u 逻辑处理器 · %u 插槽 · %u 对", gResults.LatCpus,
+                gResults.LatSockets, gResults.LatPairs);
+    RowKV(&sb, "规模", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ns", gResults.LatMedianNs10 / 10,
+                gResults.LatMedianNs10 % 10);
+    RowKV(&sb, "全部中位", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ns", gResults.LatSiblingNs10 / 10,
+                gResults.LatSiblingNs10 % 10);
+    RowKV(&sb, "同核双线程", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ns", gResults.LatIntraNs10 / 10,
+                gResults.LatIntraNs10 % 10);
+    RowKV(&sb, "同插槽跨核", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ns", gResults.LatCrossNs10 / 10,
+                gResults.LatCrossNs10 % 10);
+    RowKV(&sb, "跨插槽", num);
+    UiStrPrintf(num, sizeof(num), "%u.%u ~ %u.%u ns", gResults.LatMinNs10 / 10,
+                gResults.LatMinNs10 % 10, gResults.LatMaxNs10 / 10,
+                gResults.LatMaxNs10 % 10);
+    RowKV(&sb, "最小 / 最大", num);
+    UiStrPrintf(num, sizeof(num), "%u ms", gResults.LatElapsedMs);
+    RowKV(&sb, "耗时", num);
+  }
+  SbAdd(&sb, "</table>\n");
+  if (gResults.LatTested && gResults.LatSocketCount > 1) {
+    UINT32 s0, s1;
+    SbAdd(&sb, "<table><tr><th style=\"width:auto\">插槽</th>");
+    for (s0 = 0; s0 < gResults.LatSocketCount && s0 < 8; s0++) {
+      UiStrPrintf(num, sizeof(num), "P%u (ns)", s0);
+      SbAdd(&sb, "<th style=\"width:auto\">");
+      SbAdd(&sb, num);
+      SbAdd(&sb, "</th>");
+    }
+    SbAdd(&sb, "</tr>\n");
+    for (s0 = 0; s0 < gResults.LatSocketCount && s0 < 8; s0++) {
+      UiStrPrintf(num, sizeof(num), "P%u", s0);
+      SbAdd(&sb, "<tr><th>");
+      SbAdd(&sb, num);
+      SbAdd(&sb, "</th>");
+      for (s1 = 0; s1 < gResults.LatSocketCount && s1 < 8; s1++) {
+        UINT32 v = gResults.LatSockNs10[s0][s1];
+        if (v == 0) {
+          SbAdd(&sb, "<td>--</td>");
+        } else {
+          UiStrPrintf(num, sizeof(num), "%u.%u", v / 10, v % 10);
+          SbAdd(&sb, "<td>");
+          SbAdd(&sb, num);
+          SbAdd(&sb, "</td>");
+        }
+      }
+      SbAdd(&sb, "</tr>\n");
+    }
+    SbAdd(&sb, "</table>\n");
+  }
+
   }
 
   /* ---- stress ---- */

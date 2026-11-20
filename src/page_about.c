@@ -26,6 +26,7 @@ static const TOOL_INFO gInventory[] = {
   { "擦除回读校验",     "写后读比对",                "硬盘擦除页", 1 },
   { "处理器指令自检",   "整数 / SSE2 / AVX / RDRAND", "CPU 检测页", 1 },
   { "处理器吞吐测量",   "TSC 计时采样",              "CPU 检测页", 1 },
+  { "核间延迟热力图",   "逐对缓存行往返 / 插槽分块",  "核间延迟页", 1 },
   { "多核压力测试",     "MP Services 并行 AP 加压",   "压力测试页", 1 },
   { "内存压力测试",     "按 DIMM 划分写入回读",      "压力测试页", 1 },
   { "硬盘压力测试",     "随机只读并发流量",          "压力测试页", 1 },
@@ -179,6 +180,11 @@ static VOID DrawStatus(GFX_RECT card)
   y += 20;
   UiStrPrintf(buf, sizeof(buf), "CPU %s · 异常 %u · %u MOPS",
               gResults.CpuTested ? L("已测") : L("未测"), gResults.CpuErrorCount, gResults.CpuMops);
+  GfxTextClipped(inner.X, y, inner.W, buf, gTheme.Text, 1);
+  y += 20;
+  UiStrPrintf(buf, sizeof(buf), "延迟 %s · 中位 %u.%u ns",
+              gResults.LatTested ? L("已测") : L("未测"),
+              gResults.LatMedianNs10 / 10, gResults.LatMedianNs10 % 10);
   GfxTextClipped(inner.X, y, inner.W, buf, gTheme.Text, 1);
   y += 20;
   UiStrPrintf(buf, sizeof(buf), "擦除 %u 次 · %s", gResults.EraseCount,

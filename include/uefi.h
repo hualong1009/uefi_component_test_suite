@@ -337,9 +337,15 @@ typedef struct EFI_SIMPLE_POINTER_PROTOCOL {
 
 /* --------------------------------------------------------- MP services */
 typedef struct {
+  UINT32 Package;   /* physical package (socket) number, 0 based */
+  UINT32 Core;      /* physical core number inside the package   */
+  UINT32 Thread;    /* logical thread number inside the core     */
+} EFI_CPU_PHYSICAL_LOCATION;
+
+typedef struct {
   UINT32 ProcessorId;
   UINT32 StatusFlag;
-  UINT32 Location;
+  EFI_CPU_PHYSICAL_LOCATION Location;
 } EFI_PROCESSOR_INFORMATION;
 
 typedef VOID (EFIAPI *EFI_AP_PROCEDURE)(IN VOID *Buffer);

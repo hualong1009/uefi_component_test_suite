@@ -27,6 +27,7 @@ static const HOME_ENTRY gHomeEntries[] = {
   { "硬盘检测", "SMART / NVMe 健康与顺序读扫描",    PAGE_DISK,    4 },
   { "硬盘擦除", "DoD / Gutmann 多遍覆写 + 回读校验", PAGE_ERASE,   5 },
   { "CPU 检测", "整数 / FPU / 向量指令集自检",      PAGE_CPU,     6 },
+  { "核间延迟", "处理器间缓存行往返延迟热力图",     PAGE_LATENCY, 15 },
   { "压力测试", "多核 / 内存 / 硬盘持续加压计时",    PAGE_STRESS,  7 },
   { "工具集",   "启动管理器与外部诊断工具",         PAGE_TOOLS,   8 }
 };
@@ -59,6 +60,7 @@ static const char *StatusTextFor(UINT32 page)
   case PAGE_DISK: return gResults.DiskTested ? (gResults.DiskErrorCount ? "发现错误" : "已通过") : "未运行";
   case PAGE_ERASE: return gResults.EraseCount ? "已完成" : "未运行";
   case PAGE_CPU: return gResults.CpuTested ? (gResults.CpuErrorCount ? "发现错误" : "已通过") : "未运行";
+  case PAGE_LATENCY: return gResults.LatTested ? "已测量" : "未运行";
   case PAGE_STRESS:
     return gResults.StressRan ? (gResults.StressErrorCount ? "发现错误" : "已通过") : "未运行";
   default: return "就绪";
@@ -74,6 +76,7 @@ static UINT32 StatusLevelFor(UINT32 page)
   case PAGE_DISK: return gResults.DiskTested ? (gResults.DiskErrorCount ? 3 : 1) : 0;
   case PAGE_ERASE: return gResults.EraseCount ? 1 : 0;
   case PAGE_CPU: return gResults.CpuTested ? (gResults.CpuErrorCount ? 3 : 1) : 0;
+  case PAGE_LATENCY: return gResults.LatTested ? 1 : 0;
   case PAGE_STRESS: return gResults.StressRan ? (gResults.StressErrorCount ? 3 : 1) : 0;
   default: return 1;
   }

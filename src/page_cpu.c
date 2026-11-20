@@ -279,5 +279,11 @@ BOOLEAN PageCpuKey(EFI_INPUT_KEY key)
     RunChecks();
     return TRUE;
   }
+  /* the latency page is the CPU page's second question: how fast do these
+     cores talk to each other */
+  if (key.UnicodeChar == 'l' || key.UnicodeChar == 'L') {
+    UiSwitchPage(PAGE_LATENCY);
+    return TRUE;
+  }
   return FALSE;
 }

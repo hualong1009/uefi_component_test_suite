@@ -22,7 +22,7 @@ UI_THEME gTheme;
 
 static const char *const gNavLabels[] = {
   "概览", "系统信息", "系统拓扑", "内存检测", "内存拓扑", "硬盘检测", "硬盘擦除",
-  "CPU 检测", "压力测试", "工具集", "关于"
+  "CPU 检测", "核间延迟", "压力测试", "工具集", "关于"
 };
 
 static VOID ThemeInit(VOID)
@@ -1350,6 +1350,17 @@ VOID UiIcon(UINT32 kind, UINT32 x, UINT32 y, UINT32 size, UINT32 color)
   case 14: /* generic chip */
     GfxRoundOutline((GFX_RECT){ x + s / 4, y + s / 4, s / 2, s / 2 }, 2, color);
     GfxVLine(x + s / 2, y + s / 4, y + s - s / 4, color);
+    break;
+  case 15: /* heat matrix: three by three cells */
+    {
+      UINT32 b = s / 3 > 1 ? s / 3 - 1 : 1;
+      UINT32 cx, cy;
+      for (cy = 0; cy < 3; cy++) {
+        for (cx = 0; cx < 3; cx++) {
+          GfxFillRect((GFX_RECT){ x + cx * (b + 1), y + cy * (b + 1), b, b }, color);
+        }
+      }
+    }
     break;
   default: /* info */
     GfxCircle(x + s / 2, y + s / 2, s / 2 - 1, color);

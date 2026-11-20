@@ -57,6 +57,21 @@ typedef struct {
   UINT64  StressDiskBytes;
   UINT32  StressCpuThreads;
 
+  /* inter-core latency, all values in tenths of a nanosecond */
+  BOOLEAN LatTested;
+  UINT32  LatCpus;
+  UINT32  LatSockets;
+  UINT32  LatPairs;
+  UINT32  LatElapsedMs;
+  UINT32  LatMedianNs10;
+  UINT32  LatIntraNs10;
+  UINT32  LatCrossNs10;
+  UINT32  LatSiblingNs10;
+  UINT32  LatMinNs10;
+  UINT32  LatMaxNs10;
+  UINT32  LatSocketCount;
+  UINT32  LatSockNs10[8][8];
+
   /* per component health: 0 unknown, 1 ok, 2 warn, 3 critical */
   UINT32  HealthMem;
   UINT32  HealthDisk;
