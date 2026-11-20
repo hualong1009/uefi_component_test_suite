@@ -910,3 +910,4 @@ P0-P1 %u.%u ~ %u.%u ns	P0-P1 %u.%u ~ %u.%u ns
 逐对缓存行往返 / 插槽分块	per pair cache line round trip, blocked by socket
 核间延迟页	latency page
 延迟 %s · 中位 %u.%u ns	latency %s, median %u.%u ns
+CPUID	CPUID

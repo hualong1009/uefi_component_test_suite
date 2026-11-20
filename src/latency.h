@@ -26,7 +26,8 @@ typedef struct {
 typedef struct {
   BOOLEAN Ran;
   BOOLEAN Aborted;
-  BOOLEAN TopologyKnown;  /* firmware filled in the physical location      */
+  BOOLEAN TopologyKnown;  /* every processor got a distinct location       */
+  UINT32  TopoSource;     /* 0 useless, 1 firmware location, 2 cpuid        */
   UINT32  Count;          /* matrix dimension: logical processors measured */
   UINT32  SocketCount;
   UINT32  CoreCount;      /* distinct socket/core pairs                    */

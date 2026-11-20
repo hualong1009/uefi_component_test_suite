@@ -514,7 +514,15 @@ static VOID DrawStatusCard(GFX_RECT card)
   if (!gLat.Count) {
     GfxTextRight(col.X + col.W, col.Y, "n/a", gTheme.Muted, 1);
   } else {
-    GfxTextRight(col.X + col.W, col.Y, gLat.TopologyKnown ? L("完整") : L("不可用"),
+    const char *src;
+    if (!gLat.TopologyKnown) {
+      src = L("不可用");
+    } else if (gLat.TopoSource == 2) {
+      src = L("CPUID");
+    } else {
+      src = L("固件");
+    }
+    GfxTextRight(col.X + col.W, col.Y, src,
                  gLat.TopologyKnown ? gTheme.Ok : gTheme.Warn, 1);
   }
 }

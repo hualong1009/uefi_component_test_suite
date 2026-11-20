@@ -382,6 +382,83 @@ static LAT_RAW gRaw[LAT_MAX_CPU];
    and every processor would look disabled), and a package number is not always
    dense or small (one build reports package 6 for a single socket machine), so
    packages are remapped onto 0..n-1 before anything is drawn. */
+
+/* ------------------------------------------------------------- topology */
+static VOID LatCpuid(UINT32 leaf, UINT32 sub, UINT32 out[4])
+{
+  UINT32 a, b, c, d;
+
+  __asm__ volatile("cpuid" : "=a"(a), "=b"(b), "=c"(c), "=d"(d) : "a"(leaf), "c"(sub));
+  out[0] = a;
+  out[1] = b;
+  out[2] = c;
+  out[3] = d;
+}
+
+/* Bit layout of the APIC id, which is what EFI_PROCESSOR_INFORMATION calls
+   ProcessorId on x86. The firmware location is used first, but several server
+   firmwares leave it full of duplicates, so the hardware description wins
+   whenever the processor is new enough to have one. */
+static VOID LatTopoDetect(UINT32 *smtShift, UINT32 *coreShift)
+{
+  UINT32 r[4], leaf, maxLeaf, sub, smt = 0, core = 0;
+
+  *smtShift = 0;
+  *coreShift = 0;
+  LatCpuid(0, 0, r);
+  maxLeaf = r[0];
+  leaf = 0;
+  if (maxLeaf >= 0x1F) {
+    leaf = 0x1F;          /* extended topology, v2 */
+  } else if (maxLeaf >= 0x0B) {
+    leaf = 0x0B;
+  }
+  if (leaf != 0) {
+    for (sub = 0; sub < 8; sub++) {
+      UINT32 type, width;
+      LatCpuid(leaf, sub, r);
+      type = (r[2] >> 8) & 0xFF;
+      width = r[0] & 0x1F;
+      if (width == 0 || type == 0) {
+        break;
+      }
+      if (type == 1) {
+        smt = width;
+      } else if (type == 2) {
+        core = width;
+      } else if (core == 0) {
+        core = width;    /* module or tile level: treat it as the core part */
+      }
+    }
+  }
+  if (core == 0 && maxLeaf >= 4) {
+    UINT32 cores, threads = 1;
+    LatCpuid(4, 0, r);
+    cores = ((r[0] >> 26) & 0x3F) + 1;
+    LatCpuid(1, 0, r);
+    threads = (r[1] >> 16) & 0xFF;
+    if (threads == 0) {
+      threads = 1;
+    }
+    /* classic layout: thread bits below core bits, socket bits above */
+    while ((1u << smt) < threads) {
+      smt++;
+    }
+    while ((1u << core) < cores * threads) {
+      core++;
+    }
+  }
+  if (core > 0) {
+    *smtShift = smt;
+    *coreShift = core;
+  }
+}
+
+static UINT32 LatTopoMask(UINT32 shift)
+{
+  return shift >= 32 ? 0xFFFFFFFFu : ((1u << shift) - 1);
+}
+
 static UINT32 LatCollect(VOID)
 {
   UINTN total = 0, enabled = 0;
@@ -391,6 +468,7 @@ static UINT32 LatCollect(VOID)
   UINT32 *procs;
   EFI_PROCESSOR_INFORMATION info;
   BOOLEAN known, useEnabled;
+  UINT32 smtShift, coreShift, topoSource;
 
   if (gApp.BS->SetMem != 0) {
     gApp.BS->SetMem(gLatByProc, sizeof(gLatByProc), 0xFF);
@@ -412,13 +490,28 @@ static UINT32 LatCollect(VOID)
   DbgDec(enabled);
   DbgStr(DBG_NL);
 
+  LatTopoDetect(&smtShift, &coreShift);
+  topoSource = coreShift > 0 ? 2 : 1;
+  DbgStr("lat: topo smt=");
+  DbgDec(smtShift);
+  DbgStr(" core=");
+  DbgDec(coreShift);
+  DbgStr(DBG_NL);
+
   for (i = 0; i < total; i++) {
     if (EFI_ERROR(gLatMp->GetProcessorInfo(gLatMp, i, &info))) {
       continue;
     }
-    gRaw[i].Pkg = info.Location.Package;
-    gRaw[i].Core = info.Location.Core;
-    gRaw[i].Thread = info.Location.Thread;
+    if (topoSource == 2) {
+      UINT32 apic = (UINT32)info.ProcessorId;
+      gRaw[i].Pkg = apic >> coreShift;
+      gRaw[i].Core = (apic >> smtShift) & LatTopoMask(coreShift - smtShift);
+      gRaw[i].Thread = apic & LatTopoMask(smtShift);
+    } else {
+      gRaw[i].Pkg = info.Location.Package;
+      gRaw[i].Core = info.Location.Core;
+      gRaw[i].Thread = info.Location.Thread;
+    }
     gRaw[i].Proc = i;
     gRaw[i].En = ((info.StatusFlag & 2) != 0) ? TRUE : FALSE;   /* ENABLED bit */
     if (gRaw[i].En) {
@@ -557,6 +650,7 @@ static UINT32 LatCollect(VOID)
   gApp.BS->FreePool(keys);
   gApp.BS->FreePool(procs);
   gLat.TopologyKnown = known;
+  gLat.TopoSource = known ? topoSource : 0;
   DbgStr("lat: collected=");
   DbgDec(n);
   DbgStr(" packages=");
