@@ -432,19 +432,25 @@ static VOID LatTopoDetect(UINT32 *smtShift, UINT32 *coreShift)
     }
   }
   if (core == 0 && maxLeaf >= 4) {
-    UINT32 cores, threads = 1;
+    UINT32 cores, logical = 1, perCore;
     LatCpuid(4, 0, r);
     cores = ((r[0] >> 26) & 0x3F) + 1;
     LatCpuid(1, 0, r);
-    threads = (r[1] >> 16) & 0xFF;
-    if (threads == 0) {
-      threads = 1;
+    /* EBX[23:16] is every addressable logical processor in a package, so it
+       covers both the cores and the threads of one */
+    logical = (r[1] >> 16) & 0xFF;
+    if (logical == 0) {
+      logical = cores;
+    }
+    perCore = logical / (cores ? cores : 1);
+    if (perCore < 1) {
+      perCore = 1;
     }
     /* classic layout: thread bits below core bits, socket bits above */
-    while ((1u << smt) < threads) {
+    while ((1u << smt) < perCore) {
       smt++;
     }
-    while ((1u << core) < cores * threads) {
+    while ((1u << core) < logical) {
       core++;
     }
   }
