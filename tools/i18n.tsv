@@ -959,6 +959,33 @@ SRAT 未提供分域内存，各列的物理放置并不确定	SRAT reports no p
 <th style="width:auto">全核同时读</th></tr>\n	<th style="width:auto">all cores reading</th></tr>\n
 ↑↓ 选行   [ ] 换列   N 换插槽   Z 放大   F5 测量   F6 停止	up/down row   [ ] column   N socket   Z zoom   F5 measure   F6 stop
 ↑↓ 选行   [ ] 换列   N 换内存域   Z 放大   F5 测量   F6 停止	up/down row   [ ] column   N domain   Z zoom   F5 measure   F6 stop
-共 12 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%	12 pages - Space checks - Enter opens - F2 exports - memory coverage %u%%
+共 %u 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%	%u pages - Space checks - Enter opens - F2 exports - memory coverage %u%%
 %u 个插槽 · %u 个采样 · 每次 %u MB · 按 F5 开始	%u sockets · %u samples · %u MB each · press F5
 %u 个逻辑处理器 · %u 个内存域	%u logical processors · %u memory domains
+温度	Temperature
+通电时间	Power-on time
+通电次数	Power cycles
+寿命余量	Life remaining
+累计读取	Total read
+介质错误	Media errors
+关键属性	Key attributes
+%u 小时（约 %u 天）	%u h (about %u days)
+%u 次 · 异常断电 %u 次	%u - unsafe shutdowns %u
+剩余 %u%% · 已用 %u%%	%u%% left - %u%% used
+剩余 %u%% · 已用 %u%% · 备用空间 %u%%（阈值 %u%%）	%u%% left - %u%% used - spare %u%% (threshold %u%%)
+%u 次数据完整性错误	%u data integrity errors
+0 次（无数据完整性错误）	0 - no data integrity errors
+%u C%s	%u C%s
+ · 偏高	 - high
+隐藏 %u 个空端口	hidden %u empty ports
+已隐藏 %u 个下游无设备的 root port	hid %u root ports with nothing behind them
+已显示全部 root port，包括下游没有设备的端口	showing every root port, including the ones with no device behind them
+↑↓ 选择   Enter 定位块设备   H 空端口   F5 重扫	up/down select   Enter locate disk   H empty ports   F5 rescan
+%u 个设备 · %u 个端点 · 隐藏 %u 个空端口	%u devices - %u endpoints - %u empty ports hidden
+备用空间	Spare
+%u%%（告警阈值 %u%%）	%u%% (alert at %u%%)
+%u h · %u 次	%u h · %u cycles
+%u 次介质错误	%u media errors
+<table><tr><th style="width:auto">设备</th><th style="width:auto">容量</th><th style="width:auto">接口</th><th style="width:auto">健康</th><th style="width:auto">温度</th><th style="width:auto">通电</th><th style="width:auto">寿命余量</th><th style="width:auto">累计读 / 写</th><th style="width:auto">SMART</th><th style="width:auto">扫描</th><th style="width:auto">速度</th></tr>	<table><tr><th style="width:auto">Device</th><th style="width:auto">Capacity</th><th style="width:auto">Interface</th><th style="width:auto">Health</th><th style="width:auto">Temp</th><th style="width:auto">Power-on</th><th style="width:auto">Life left</th><th style="width:auto">Read / Write</th><th style="width:auto">SMART</th><th style="width:auto">Scan</th><th style="width:auto">Speed</th></tr>
+上游	Upstream
+<table><tr><th style="width:auto">设备</th><th style="width:auto">容量</th><th style="width:auto">接口</th><th style="width:auto">健康</th><th style="width:auto">温度</th><th style="width:auto">通电</th><th style="width:auto">寿命余量</th><th style="width:auto">累计读 / 写</th><th style="width:auto">SMART</th><th style="width:auto">扫描</th><th style="width:auto">速度</th></tr>\n	<table><tr><th style="width:auto">Device</th><th style="width:auto">Capacity</th><th style="width:auto">Interface</th><th style="width:auto">Health</th><th style="width:auto">Temp</th><th style="width:auto">Power-on</th><th style="width:auto">Life left</th><th style="width:auto">Read / Write</th><th style="width:auto">SMART</th><th style="width:auto">Scan</th><th style="width:auto">Speed</th></tr>\n

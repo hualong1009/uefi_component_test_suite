@@ -73,5 +73,6 @@ const char *PciClassText(const PCI_DEV *dev);
 VOID     PciFormatAddress(const PCI_DEV *dev, char *buf, UINTN cap);
 VOID     PciFormatMac(const UINT8 *mac, char *buf, UINTN cap);
 BOOLEAN  PciHasLink(const PCI_DEV *dev);
+UINT32   PciDepth(const PCI_DEV *dev);
 
 #endif

@@ -356,6 +356,69 @@ static EFI_NVM_EXPRESS_PASS_THRU_PROTOCOL *FindNvmePassThru(DISK_DEV *disk)
   return found;
 }
 
+/* ------------------------------------------------------------ SMART utils */
+/* attributes worth keeping: reallocated / power-on hours / power cycles /
+   reported uncorrectable / temperature / pending / offline uncorrectable /
+   cable CRC / ssd life left / percentage used */
+static const UINT8 gAtaAttrIds[DISK_ATTR_MAX] = {
+  5, 9, 12, 187, 194, 197, 198, 199, 231, 202
+};
+
+const DISK_ATTR *DiskAttr(const DISK_DEV *disk, UINT8 id)
+{
+  UINT32 i;
+  if (disk == 0) {
+    return 0;
+  }
+  for (i = 0; i < disk->AttrCount && i < DISK_ATTR_MAX; i++) {
+    if (disk->Attrs[i].Id == id) {
+      return &disk->Attrs[i];
+    }
+  }
+  return 0;
+}
+
+static UINT32 AttrValue(const DISK_DEV *disk, UINT8 id)
+{
+  const DISK_ATTR *a = DiskAttr(disk, id);
+  return a ? a->Value : 0;
+}
+
+static UINT64 AttrRaw(const DISK_DEV *disk, UINT8 id)
+{
+  const DISK_ATTR *a = DiskAttr(disk, id);
+  return a ? a->Raw : 0;
+}
+
+/* one compact line with the four attributes people actually look at */
+VOID DiskSmartSummary(const DISK_DEV *disk, char *buf, UINTN cap)
+{
+  buf[0] = 0;
+  if (disk == 0) {
+    return;
+  }
+  if (disk->AttrCount == 0) {
+    return;
+  }
+  UiStrPrintf(buf, cap, "5=%llu 197=%llu 198=%llu 199=%llu",
+              (unsigned long long)AttrRaw(disk, 5), (unsigned long long)AttrRaw(disk, 197),
+              (unsigned long long)AttrRaw(disk, 198), (unsigned long long)AttrRaw(disk, 199));
+  if (AttrRaw(disk, 187)) {
+    UINTN n = GfxStrLen(buf);
+    UiStrPrintf(buf + n, cap - n, " 187=%llu", (unsigned long long)AttrRaw(disk, 187));
+  }
+}
+
+static UINT64 LeBytes(const UINT8 *p, UINT32 n)
+{
+  UINT64 v = 0;
+  UINT32 i;
+  for (i = 0; i < n && i < 8; i++) {
+    v |= (UINT64)p[i] << (8 * i);
+  }
+  return v;
+}
+
 /* ------------------------------------------------------------- ATA SMART */
 static UINT8 gAtaBuffer[512] __attribute__((aligned(64)));
 static EFI_ATA_STATUS_BLOCK gAtaStatus;
@@ -440,8 +503,36 @@ static EFI_STATUS AtaIdentify(DISK_DEV *disk)
   if (!EFI_ERROR(ata->PassThru(ata, port, pmport, &packet, 0))) {
     UINT8 *smart = gAtaBuffer;
     UINT32 temp = smart[194] ? smart[194] : smart[190];
+    UINT32 k;
     disk->Temperature = temp;
     disk->PowerOnHours = (UINT32)smart[113] | ((UINT32)smart[114] << 8);
+    /* 30 attribute entries of 12 bytes each start at offset 2 */
+    disk->AttrCount = 0;
+    for (k = 0; k < DISK_ATTR_MAX; k++) {
+      UINT32 i;
+      for (i = 0; i < 30; i++) {
+        UINT8 *a = smart + 2 + i * 12;
+        if (a[0] == 0) {
+          break;
+        }
+        if (a[0] != gAtaAttrIds[k]) {
+          continue;
+        }
+        disk->Attrs[disk->AttrCount].Id = a[0];
+        disk->Attrs[disk->AttrCount].Value = a[3];
+        disk->Attrs[disk->AttrCount].Worst = a[4];
+        disk->Attrs[disk->AttrCount].Raw = LeBytes(a + 5, 6);
+        disk->AttrCount++;
+        break;
+      }
+    }
+    disk->PowerCycles = (UINT32)AttrRaw(disk, 12);
+    disk->LifePercent = DISK_LIFE_UNKNOWN;
+    if (DiskAttr(disk, 231)) {
+      disk->LifePercent = AttrValue(disk, 231) > 100 ? 100 : AttrValue(disk, 231);
+    } else if (DiskAttr(disk, 202)) {
+      disk->LifePercent = AttrValue(disk, 202) > 100 ? 100 : AttrValue(disk, 202);
+    }
     if (smart[0] <= 0x02) {
       disk->HealthLevel = (smart[0] == 0) ? 1 : 2;
       UiStrPrintf(disk->HealthText, sizeof(disk->HealthText),
@@ -541,6 +632,7 @@ static EFI_STATUS NvmeIdentify(DISK_DEV *disk)
     UINT8 *smart = gNvmeSmartBuf;
     UINT32 tempK = (UINT32)smart[1] | ((UINT32)smart[2] << 8);
     UINT8 flags = smart[0];
+    UINT32 usedPct = smart[5];
     UINT64 used = (UINT64)smart[48] | ((UINT64)smart[49] << 8) | ((UINT64)smart[50] << 16)
                   | ((UINT64)smart[51] << 24);
     used |= ((UINT64)smart[52] | ((UINT64)smart[53] << 8) | ((UINT64)smart[54] << 16)
@@ -549,6 +641,14 @@ static EFI_STATUS NvmeIdentify(DISK_DEV *disk)
     disk->PowerOnHours = (UINT32)smart[128] | ((UINT32)smart[129] << 8)
                          | ((UINT32)smart[130] << 16) | ((UINT32)smart[131] << 24);
     disk->BytesWritten = used * 512000ULL; /* data unit = 512000 bytes */
+    disk->BytesRead = LeBytes(smart + 32, 8) * 512000ULL;
+    disk->LifePercent = usedPct >= 100 ? 0 : 100 - usedPct;
+    disk->SparePercent = smart[3];
+    disk->SpareThreshold = smart[4];
+    disk->PowerCycles = (UINT32)LeBytes(smart + 112, 8);
+    disk->UnsafeShutdowns = (UINT32)LeBytes(smart + 144, 8);
+    disk->MediaErrors = (UINT32)LeBytes(smart + 160, 8);
+    disk->AttrCount = 0;
     disk->HealthLevel = (flags & 0x01) ? 2 : 1;
     UiStrPrintf(disk->HealthText, sizeof(disk->HealthText), "NVMe %s · %uC · 通电 %u h",
                 (flags & 0x01) ? L("警告") : L("正常"), disk->Temperature, disk->PowerOnHours);
@@ -578,6 +678,11 @@ VOID DiskRefreshHealth(DISK_DEV *disk)
     if (EFI_ERROR(AtaIdentify(disk))) {
       disk->Iface = 0;
       disk->HealthLevel = 0;
+      disk->LifePercent = DISK_LIFE_UNKNOWN;
+      disk->SparePercent = DISK_LIFE_UNKNOWN;
+      disk->AttrCount = 0;
+      disk->PowerOnHours = 0;
+      disk->PowerCycles = 0;
       UiStrPrintf(disk->HealthText, sizeof(disk->HealthText), "仅块设备访问（无 SMART 通道）");
     }
   }
@@ -658,6 +763,8 @@ VOID DiskEnumerate(VOID)
     }
     d = &gDisks[gDiskCount];
     gApp.BS->SetMem(d, sizeof(*d), 0);
+    d->LifePercent = DISK_LIFE_UNKNOWN;
+    d->SparePercent = DISK_LIFE_UNKNOWN;
     d->Handle = handles[i];
     d->Io = io;
     d->BlockSize = media->BlockSize;

@@ -172,6 +172,18 @@ BOOLEAN PciHasLink(const PCI_DEV *dev)
   return (BOOLEAN)(dev->LinkGen || dev->LinkWidth);
 }
 
+UINT32 PciDepth(const PCI_DEV *dev)
+{
+  UINT32 depth = 0;
+  const PCI_DEV *walk = dev;
+
+  while (walk && !walk->IsRoot && walk->Parent < PciCount() && depth < 32) {
+    walk = PciAt(walk->Parent);
+    depth++;
+  }
+  return depth;
+}
+
 /* -------------------------------------------------------------- access */
 
 /* The firmware side layout of EFI_PCI_IO_PROTOCOL has shifted by one member

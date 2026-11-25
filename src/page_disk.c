@@ -132,6 +132,7 @@ static VOID DrawDetail(GFX_RECT card)
   GFX_RECT inner = UiCardInner(card);
   char buf[128];
   char buf2[96];
+  UINT32 rowsEnd;
 
   if (d == 0) {
     GfxText(inner.X, inner.Y + 8, "未选择设备", gTheme.Muted, 1);
@@ -155,21 +156,83 @@ static VOID DrawDetail(GFX_RECT card)
     KVRow(&col, "接口", buf, gTheme.Text);
     KVRow(&col, "序列号", d->Serial[0] ? d->Serial : "n/a", gTheme.Text);
     KVRow(&col, "固件版本", d->Firmware[0] ? d->Firmware : "n/a", gTheme.Text);
-    KVRow(&col, "设备属性", d->ReadOnly ? "只读" : "可写（支持擦除与覆写）", gTheme.Text);
     KVRow(&col, "健康状态", d->HealthText[0] ? d->HealthText : "无可用的 SMART 通道",
           d->HealthLevel >= 2 ? gTheme.Warn : gTheme.Text);
+    KVRow(&col, "设备属性", d->ReadOnly ? "只读" : "可写（支持擦除与覆写）", gTheme.Text);
+
+    /* --- SMART extended attributes ------------------------------------- */
+    if (d->Temperature) {
+      UiStrPrintf(buf, sizeof(buf), "%u C%s", d->Temperature,
+                  d->Temperature >= 60 ? L(" · 偏高") : "");
+      KVRow(&col, "温度", buf, d->Temperature >= 60 ? gTheme.Warn : gTheme.Text);
+    } else {
+      KVRow(&col, "温度", "n/a", gTheme.Muted);
+    }
+    if (d->PowerOnHours) {
+      UiStrPrintf(buf, sizeof(buf), "%u 小时（约 %u 天）", d->PowerOnHours, d->PowerOnHours / 24);
+    } else {
+      UiStrPrintf(buf, sizeof(buf), "n/a");
+    }
+    KVRow(&col, "通电时间", buf, gTheme.Text);
+    if (d->PowerCycles) {
+      if (d->UnsafeShutdowns) {
+        UiStrPrintf(buf, sizeof(buf), "%u 次 · 异常断电 %u 次", d->PowerCycles, d->UnsafeShutdowns);
+      } else {
+        UiStrPrintf(buf, sizeof(buf), "%u 次", d->PowerCycles);
+      }
+    } else {
+      UiStrPrintf(buf, sizeof(buf), "n/a");
+    }
+    KVRow(&col, "通电次数", buf, gTheme.SubText);
+    if (d->LifePercent != DISK_LIFE_UNKNOWN) {
+      UINT32 used = d->LifePercent >= 100 ? 0 : 100 - d->LifePercent;
+      UiStrPrintf(buf, sizeof(buf), "剩余 %u%% · 已用 %u%%", d->LifePercent, used);
+      KVRow(&col, "寿命余量", buf,
+            d->LifePercent < 10 ? gTheme.Crit : (d->LifePercent < 30 ? gTheme.Warn : gTheme.Ok));
+    } else {
+      KVRow(&col, "寿命余量", "n/a", gTheme.Muted);
+    }
+    if (d->LifePercent != DISK_LIFE_UNKNOWN && d->SparePercent != DISK_LIFE_UNKNOWN) {
+      UiStrPrintf(buf, sizeof(buf), "%u%%（告警阈值 %u%%）", d->SparePercent, d->SpareThreshold);
+      KVRow(&col, "备用空间", buf,
+            d->SparePercent <= d->SpareThreshold ? gTheme.Warn : gTheme.SubText);
+    }
+    if (d->BytesRead) {
+      GfxFormatSize(buf2, sizeof(buf2), d->BytesRead);
+    } else {
+      UiStrPrintf(buf2, sizeof(buf2), "n/a");
+    }
+    KVRow(&col, "累计读取", buf2, gTheme.SubText);
     if (d->BytesWritten) {
       GfxFormatSize(buf2, sizeof(buf2), d->BytesWritten);
     } else {
       UiStrPrintf(buf2, sizeof(buf2), "n/a");
     }
     KVRow(&col, "累计写入", buf2, gTheme.SubText);
-    KVRow(&col, "设备路径", d->PathText, gTheme.Muted);
+    if (d->AttrCount) {
+      /* ATA: raw values of the four counters that matter */
+      DiskSmartSummary(d, buf, sizeof(buf));
+      KVRow(&col, "关键属性", buf,
+            (DiskAttr(d, 5) && DiskAttr(d, 5)->Raw) || (DiskAttr(d, 197) && DiskAttr(d, 197)->Raw)
+            || (DiskAttr(d, 198) && DiskAttr(d, 198)->Raw) ? gTheme.Warn : gTheme.SubText);
+    } else if (d->Iface == 2) {
+      /* NVMe reports the counter directly; nothing is assumed for ATA */
+      if (d->MediaErrors) {
+        UiStrPrintf(buf, sizeof(buf), "%u 次数据完整性错误", d->MediaErrors);
+        KVRow(&col, "介质错误", buf, gTheme.Crit);
+      } else {
+        KVRow(&col, "介质错误", "0 次（无数据完整性错误）", gTheme.Ok);
+      }
+    }
+    if (d->AttrCount) {
+      KVRow(&col, "设备路径", d->PathText, gTheme.Muted);
+    }
+    rowsEnd = col.Y;
   }
 
   {
     GFX_RECT chart;
-    UINT32 cy = inner.Y + 206;
+    UINT32 cy = rowsEnd + 6;
     UiDivider((GFX_RECT){ inner.X, cy, inner.W, 1 });
     cy += 10;
     if (d->Scanned) {

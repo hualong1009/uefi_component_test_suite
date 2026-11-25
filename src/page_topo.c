@@ -122,7 +122,8 @@ static VOID DrawDetail(GFX_RECT card, UINT32 row)
   } else if (dev->IsBridge) {
     UiStrPrintf(buf, sizeof(buf), "次总线 %u · 从属总线 %u", dev->SecondaryBus, dev->SubordinateBus);
     KVRow(&col, "下游总线", dev->IsRoot ? L("全部总线") : buf, gTheme.SubText);
-    UiStrPrintf(buf, sizeof(buf), "%u", dev->IsRoot ? PciCount() - 1 : 0);
+    UiStrPrintf(buf, sizeof(buf), "%u", dev->IsRoot ? PciCount() - 1
+                                                   : TopoChildCount(TopoRowDevice(row)));
     KVRow(&col, "挂载设备", buf, gTheme.Muted);
     if (dev->IsRoot && NetCount() && !PciClassCount(PCI_KIND_NET)) {
       /* firmware bound the NICs but never published a PCI node for them, so
@@ -149,8 +150,13 @@ VOID PageTopoDraw(GFX_RECT content)
   UINT32 visible;
   char buf[96];
 
-  UiStrPrintf(buf, sizeof(buf), "%u 个设备 · %u 个端点 · %u 条链路", PciCount(), PciEndpointCount(),
-              PciRootCount());
+  if (TopoHiddenCount()) {
+    UiStrPrintf(buf, sizeof(buf), "%u 个设备 · %u 个端点 · 隐藏 %u 个空端口", PciCount(),
+                PciEndpointCount(), TopoHiddenCount());
+  } else {
+    UiStrPrintf(buf, sizeof(buf), "%u 个设备 · %u 个端点 · %u 条链路", PciCount(),
+                PciEndpointCount(), PciRootCount());
+  }
   UiCard(diag, "连接图", buf);
   inner = UiCardInner(diag);
   visible = inner.H / TopoRowHeight(FALSE);
@@ -184,6 +190,8 @@ VOID PageTopoPoint(UINT32 row)
 
 BOOLEAN PageTopoKey(EFI_INPUT_KEY key)
 {
+  char buf[96];
+
   switch (key.ScanCode) {
   case SCAN_UP:
     if (gTopoSel > 0) {
@@ -202,6 +210,23 @@ BOOLEAN PageTopoKey(EFI_INPUT_KEY key)
     return TRUE;
   default:
     break;
+  }
+  if (key.UnicodeChar == 'h' || key.UnicodeChar == 'H') {
+    /* hidden root ports are the ones with nothing plugged in */
+    UINT32 keep = (gTopoSel < TopoRowCount()) ? TopoRowDevice(gTopoSel) : PCI_NO_INDEX;
+    INT32 found;
+    TopoSetHideEmpty(TopoHideEmpty() ? FALSE : TRUE);
+    TopoRefresh();
+    found = (keep == PCI_NO_INDEX) ? -1 : TopoFindRow(keep);
+    gTopoSel = (found >= 0) ? (UINT32)found : 0;
+    ClampScroll(1);
+    if (TopoHideEmpty()) {
+      UiStrPrintf(buf, sizeof(buf), "已隐藏 %u 个下游无设备的 root port", TopoHiddenCount());
+      UiSetStatus(1, buf);
+    } else {
+      UiSetStatus(0, "已显示全部 root port，包括下游没有设备的端口");
+    }
+    return TRUE;
   }
   if (key.UnicodeChar == '\r' || key.UnicodeChar == '\n') {
     if (gTopoSel < TopoRowCount()) {

@@ -344,6 +344,8 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
     SbAdd(&sb, "链路");
     SbAdd(&sb, "</th><th style=\"width:auto\">");
     SbAdd(&sb, "挂载");
+    SbAdd(&sb, "</th><th style=\"width:auto\">");
+    SbAdd(&sb, "上游");
     SbAdd(&sb, "</th></tr>\n");
     for (i = 0; i < PciCount() && i < PCI_MAX_DEVS; i++) {
       PCI_DEV *dev = PciAt(i);
@@ -356,6 +358,17 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
       SbAdd(&sb, "<tr><td>");
       SbAdd(&sb, addr);
       SbAdd(&sb, "</td><td>");
+      {
+        /* indent by tree depth: a flat list hides which bridge owns what */
+        UINT32 depth = PciDepth(dev);
+        UINT32 k;
+        for (k = 0; k < depth; k++) {
+          SbAdd(&sb, "&nbsp;&nbsp;&nbsp;&nbsp;");
+        }
+        if (depth) {
+          SbAdd(&sb, "&#8627; ");
+        }
+      }
       SbAdd(&sb, L(PciClassText(dev)));
       SbAdd(&sb, "</td><td>");
       UiStrPrintf(num, sizeof(num), "%s %04X:%04X",
@@ -366,6 +379,14 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
       SbAdd(&sb, link);
       SbAdd(&sb, "</td><td>");
       SbAdd(&sb, asset[0] ? asset : "-");
+      SbAdd(&sb, "</td><td>");
+      if (!dev->IsRoot && dev->Parent < PciCount()) {
+        char paddr[24];
+        PciFormatAddress(PciAt(dev->Parent), paddr, sizeof(paddr));
+        SbAdd(&sb, paddr);
+      } else {
+        SbAdd(&sb, "-");
+      }
       SbAdd(&sb, "</td></tr>\n");
     }
     SbAdd(&sb, "</table>\n");
@@ -410,6 +431,9 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
   } else {
     SbAdd(&sb, "<table><tr><th style=\"width:auto\">设备</th><th style=\"width:auto\">容量</th>"
                "<th style=\"width:auto\">接口</th><th style=\"width:auto\">健康</th>"
+               "<th style=\"width:auto\">温度</th><th style=\"width:auto\">通电</th>"
+               "<th style=\"width:auto\">寿命余量</th><th style=\"width:auto\">累计读 / 写</th>"
+               "<th style=\"width:auto\">SMART</th>"
                "<th style=\"width:auto\">扫描</th><th style=\"width:auto\">速度</th></tr>\n");
     for (i = 0; i < DiskCount(); i++) {
       DISK_DEV *d = DiskAt(i);
@@ -422,6 +446,53 @@ static EFI_STATUS ReportExportHtml(UI_APP *app, UINT32 mask, const char *name)
       SbHtml(&sb, DiskIfaceName(d->Iface));
       SbAdd(&sb, "</td><td>");
       SbHtml(&sb, d->HealthText[0] ? d->HealthText : "n/a");
+      SbAdd(&sb, "</td><td>");
+      if (d->Temperature) {
+        UiStrPrintf(num, sizeof(num), "%u C", d->Temperature);
+        SbAdd(&sb, num);
+      } else {
+        SbAdd(&sb, "n/a");
+      }
+      SbAdd(&sb, "</td><td>");
+      if (d->PowerOnHours) {
+        UiStrPrintf(num, sizeof(num), "%u h · %u 次", d->PowerOnHours, d->PowerCycles);
+        SbAdd(&sb, num);
+      } else {
+        SbAdd(&sb, "n/a");
+      }
+      SbAdd(&sb, "</td><td>");
+      if (d->LifePercent != DISK_LIFE_UNKNOWN) {
+        UiStrPrintf(num, sizeof(num), "%u%%", d->LifePercent);
+        SbAdd(&sb, num);
+      } else {
+        SbAdd(&sb, "n/a");
+      }
+      SbAdd(&sb, "</td><td>");
+      {
+        char rbuf[32], wbuf[32];
+        if (d->BytesRead) {
+          GfxFormatSize(rbuf, sizeof(rbuf), d->BytesRead);
+        } else {
+          UiStrPrintf(rbuf, sizeof(rbuf), "-");
+        }
+        if (d->BytesWritten) {
+          GfxFormatSize(wbuf, sizeof(wbuf), d->BytesWritten);
+        } else {
+          UiStrPrintf(wbuf, sizeof(wbuf), "-");
+        }
+        UiStrPrintf(num, sizeof(num), "%s / %s", rbuf, wbuf);
+        SbAdd(&sb, num);
+      }
+      SbAdd(&sb, "</td><td>");
+      if (d->AttrCount) {
+        DiskSmartSummary(d, num, sizeof(num));
+        SbAdd(&sb, num);
+      } else if (d->Iface == 2) {
+        UiStrPrintf(num, sizeof(num), "%u 次介质错误", d->MediaErrors);
+        SbAdd(&sb, num);
+      } else {
+        SbAdd(&sb, "n/a");
+      }
       SbAdd(&sb, "</td><td>");
       if (d->Scanned) {
         UiStrPrintf(num, sizeof(num), "%u 错误", d->ScanErrors);

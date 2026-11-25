@@ -331,8 +331,8 @@ VOID PageHomeDraw(GFX_RECT content)
     }
   }
   UiStrPrintf(buf, sizeof(buf),
-              "共 12 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%",
-              (gResults.MemCoveragePm + 5) / 10);
+              "共 %u 个页面 · 空格 勾选 · Enter 打开 · F2 导出报告 · 内存覆盖 %u%%",
+              (UINT32)PAGE_COUNT, (gResults.MemCoveragePm + 5) / 10);
   GfxTextClipped(content.X, content.Y + content.H - 17, content.W, buf, gTheme.Muted, 1);
 }
 

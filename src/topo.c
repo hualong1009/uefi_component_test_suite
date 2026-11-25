@@ -8,15 +8,82 @@
 #include "results.h"
 #include "i18n.h"
 
-static UINT32 gRows[PCI_MAX_DEVS];
-static UINT32 gDepths[PCI_MAX_DEVS];
-static UINT32 gRowCount;
+static UINT32  gRows[PCI_MAX_DEVS];
+static UINT32  gDepths[PCI_MAX_DEVS];
+static UINT32  gRowCount;
+static BOOLEAN gHideEmpty = TRUE;
+static UINT32  gHidden;
+static BOOLEAN gHasDevice[PCI_MAX_DEVS];   /* subtree holds at least one endpoint */
+
+VOID TopoSetHideEmpty(BOOLEAN on)
+{
+  gHideEmpty = on;
+}
+
+BOOLEAN TopoHideEmpty(VOID)
+{
+  return gHideEmpty;
+}
+
+UINT32 TopoHiddenCount(VOID)
+{
+  return gHidden;
+}
+
+UINT32 TopoChildCount(UINT32 pciIndex)
+{
+  UINT32 i;
+  UINT32 n = 0;
+  for (i = 0; i < PciCount(); i++) {
+    UINT32 p = PciAt(i)->Parent;
+    UINT32 guard = 0;
+    while (p != PCI_NO_INDEX && guard++ < 16) {
+      if (p == pciIndex) {
+        n++;
+        break;
+      }
+      p = PciAt(p)->Parent;
+    }
+  }
+  return n;
+}
+
+/* mark every node that has a real device somewhere below it */
+static VOID MarkDevices(VOID)
+{
+  UINT32 i;
+  for (i = 0; i < PCI_MAX_DEVS; i++) {
+    gHasDevice[i] = FALSE;
+  }
+  for (i = 0; i < PciCount(); i++) {
+    UINT32 p;
+    if (PciAt(i)->IsBridge) {
+      continue;
+    }
+    p = PciAt(i)->Parent;
+    while (p != PCI_NO_INDEX && p < PCI_MAX_DEVS) {
+      gHasDevice[p] = TRUE;
+      p = PciAt(p)->Parent;
+    }
+  }
+}
+
+/* a PCI-to-PCI bridge: root port, switch port or a classic PCI bridge */
+static BOOLEAN IsPciePort(UINT32 i)
+{
+  PCI_DEV *d = PciAt(i);
+  return (BOOLEAN)(!d->IsRoot && d->Class == 0x06 && d->SubClass == 0x04);
+}
 
 static VOID AddChildren(UINT32 parent, UINT32 depth)
 {
   UINT32 i;
   for (i = 0; i < PciCount() && gRowCount < PCI_MAX_DEVS; i++) {
     if (PciAt(i)->Parent == parent && !PciAt(i)->IsRoot) {
+      if (gHideEmpty && IsPciePort(i) && !gHasDevice[i]) {
+        gHidden++;
+        continue;
+      }
       gRows[gRowCount] = i;
       gDepths[gRowCount] = depth;
       gRowCount++;
@@ -29,6 +96,8 @@ VOID TopoRefresh(VOID)
 {
   UINT32 i;
   gRowCount = 0;
+  gHidden = 0;
+  MarkDevices();
   for (i = 0; i < PciCount() && gRowCount < PCI_MAX_DEVS; i++) {
     if (!PciAt(i)->IsRoot) {
       continue;

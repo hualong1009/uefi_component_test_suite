@@ -6,7 +6,7 @@ const UI_PAGE gPages[] = {
     PageHomeEnter, 0, PageHomeDraw, PageHomeKey, PageHomePoint },
   { "系统信息", "System",  "↑↓ 滚动列表   1-9 直跳页面 · 0 关于   F5 重新采集   F2 导出报告",
     PageSysInfoEnter, 0, PageSysInfoDraw, PageSysInfoKey, PageSysInfoPoint },
-  { "系统拓扑", "Topology", "↑↓ 选择设备   Enter 定位块设备   F5 重新扫描",
+  { "系统拓扑", "Topology", "↑↓ 选择   Enter 定位块设备   H 空端口   F5 重扫",
     PageTopoEnter, 0, PageTopoDraw, PageTopoKey, PageTopoPoint },
   { "内存检测", "Memory",  "F5 开始   F6 停止   F7 图案   F8 覆盖   T 颗粒视图",
     PageMemEnter, PageMemLeave, PageMemDraw, PageMemKey, PageMemPoint },
