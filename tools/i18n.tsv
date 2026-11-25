@@ -753,7 +753,7 @@ USB 控制器	USB controller
 网卡 %u	NIC %u
 桥	Bridge
 桥接设备	Bridge device
-桥的下游设备在左侧树中缩进显示	Downstream devices are indented in the tree
+下游设备在左侧树中缩进显示 · H 切换空端口	Downstream devices are indented in the tree · H toggles empty ports
 次总线 %u · 从属总线 %u	Sec bus %u · sub bus %u
 端点统计	Endpoints
 类 %02X:%02X · 编程接口 %02X · 修订 %02X	Class %02X:%02X · progIf %02X · rev %02X

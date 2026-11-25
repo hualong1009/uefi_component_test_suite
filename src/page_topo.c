@@ -132,7 +132,7 @@ static VOID DrawDetail(GFX_RECT card, UINT32 row)
                   NetCount());
       KVRow(&col, "说明", buf, gTheme.Warn);
     } else {
-      KVRow(&col, "说明", "桥的下游设备在左侧树中缩进显示", gTheme.Muted);
+      KVRow(&col, "说明", "下游设备在左侧树中缩进显示 · H 切换空端口", gTheme.Muted);
     }
   } else {
     KVRow(&col, "挂载块设备", "无", gTheme.Muted);
